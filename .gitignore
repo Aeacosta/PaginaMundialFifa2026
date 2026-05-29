@@ -1,0 +1,79 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.vs/
+
+# Build Output
+bin/
+obj/
+out/
+dist/
+build/
+
+# Dependencies
+node_modules/
+packages/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary Files
+*.tmp
+*.temp
+.cache/
+
+# Test Coverage
+coverage/
+*.coverage
+.nyc_output/
+
+# Package Manager
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# .NET
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# Docker
+.dockerignore
+
+# Misc
+*.bak
+*.orig
+
+# Made with Bob
