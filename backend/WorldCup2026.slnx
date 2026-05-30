@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/WorldCup2026.API/WorldCup2026.API.csproj" />
+    <Project Path="src/WorldCup2026.Application/WorldCup2026.Application.csproj" />
+    <Project Path="src/WorldCup2026.Domain/WorldCup2026.Domain.csproj" />
+    <Project Path="src/WorldCup2026.Infrastructure/WorldCup2026.Infrastructure.csproj" />
+  </Folder>
+</Solution>
