@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,12 +15,12 @@ namespace WorldCup2026.Infrastructure.Migrations
                 name: "Groups",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,17 +31,17 @@ namespace WorldCup2026.Infrastructure.Migrations
                 name: "Stadiums",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    City = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Country = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Capacity = table.Column<int>(type: "integer", nullable: false),
-                    ImageUrl = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    Latitude = table.Column<decimal>(type: "numeric(9,6)", precision: 9, scale: 6, nullable: true),
-                    Longitude = table.Column<decimal>(type: "numeric(9,6)", precision: 9, scale: 6, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    City = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Country = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Capacity = table.Column<int>(type: "INTEGER", nullable: false),
+                    ImageUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    Latitude = table.Column<decimal>(type: "TEXT", precision: 9, scale: 6, nullable: true),
+                    Longitude = table.Column<decimal>(type: "TEXT", precision: 9, scale: 6, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,16 +52,16 @@ namespace WorldCup2026.Infrastructure.Migrations
                 name: "Teams",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Code = table.Column<string>(type: "character varying(3)", maxLength: 3, nullable: false),
-                    FlagUrl = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    GroupId = table.Column<int>(type: "integer", nullable: true),
-                    Confederation = table.Column<string>(type: "text", nullable: false),
-                    FifaRanking = table.Column<int>(type: "integer", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Code = table.Column<string>(type: "TEXT", maxLength: 3, nullable: false),
+                    FlagUrl = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    GroupId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Confederation = table.Column<string>(type: "TEXT", nullable: false),
+                    FifaRanking = table.Column<int>(type: "INTEGER", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,18 +78,18 @@ namespace WorldCup2026.Infrastructure.Migrations
                 name: "Matches",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    HomeTeamId = table.Column<int>(type: "integer", nullable: false),
-                    AwayTeamId = table.Column<int>(type: "integer", nullable: false),
-                    StadiumId = table.Column<int>(type: "integer", nullable: false),
-                    MatchDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Phase = table.Column<string>(type: "text", nullable: false),
-                    Round = table.Column<int>(type: "integer", nullable: true),
-                    GroupId = table.Column<int>(type: "integer", nullable: true),
-                    Status = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    HomeTeamId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AwayTeamId = table.Column<int>(type: "INTEGER", nullable: false),
+                    StadiumId = table.Column<int>(type: "INTEGER", nullable: false),
+                    MatchDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Phase = table.Column<string>(type: "TEXT", nullable: false),
+                    Round = table.Column<int>(type: "INTEGER", nullable: true),
+                    GroupId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -125,21 +124,21 @@ namespace WorldCup2026.Infrastructure.Migrations
                 name: "Standings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    TeamId = table.Column<int>(type: "integer", nullable: false),
-                    GroupId = table.Column<int>(type: "integer", nullable: false),
-                    Played = table.Column<int>(type: "integer", nullable: false),
-                    Won = table.Column<int>(type: "integer", nullable: false),
-                    Drawn = table.Column<int>(type: "integer", nullable: false),
-                    Lost = table.Column<int>(type: "integer", nullable: false),
-                    GoalsFor = table.Column<int>(type: "integer", nullable: false),
-                    GoalsAgainst = table.Column<int>(type: "integer", nullable: false),
-                    GoalDifference = table.Column<int>(type: "integer", nullable: false),
-                    Points = table.Column<int>(type: "integer", nullable: false),
-                    Position = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TeamId = table.Column<int>(type: "INTEGER", nullable: false),
+                    GroupId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Played = table.Column<int>(type: "INTEGER", nullable: false),
+                    Won = table.Column<int>(type: "INTEGER", nullable: false),
+                    Drawn = table.Column<int>(type: "INTEGER", nullable: false),
+                    Lost = table.Column<int>(type: "INTEGER", nullable: false),
+                    GoalsFor = table.Column<int>(type: "INTEGER", nullable: false),
+                    GoalsAgainst = table.Column<int>(type: "INTEGER", nullable: false),
+                    GoalDifference = table.Column<int>(type: "INTEGER", nullable: false),
+                    Points = table.Column<int>(type: "INTEGER", nullable: false),
+                    Position = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -162,16 +161,16 @@ namespace WorldCup2026.Infrastructure.Migrations
                 name: "MatchResults",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    MatchId = table.Column<int>(type: "integer", nullable: false),
-                    HomeTeamScore = table.Column<int>(type: "integer", nullable: false),
-                    AwayTeamScore = table.Column<int>(type: "integer", nullable: false),
-                    HomeTeamPenalties = table.Column<int>(type: "integer", nullable: true),
-                    AwayTeamPenalties = table.Column<int>(type: "integer", nullable: true),
-                    WinnerTeamId = table.Column<int>(type: "integer", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    MatchId = table.Column<int>(type: "INTEGER", nullable: false),
+                    HomeTeamScore = table.Column<int>(type: "INTEGER", nullable: false),
+                    AwayTeamScore = table.Column<int>(type: "INTEGER", nullable: false),
+                    HomeTeamPenalties = table.Column<int>(type: "INTEGER", nullable: true),
+                    AwayTeamPenalties = table.Column<int>(type: "INTEGER", nullable: true),
+                    WinnerTeamId = table.Column<int>(type: "INTEGER", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -39,9 +39,9 @@ public class MatchesController : ControllerBase
         _logger.LogInformation("Getting matches with filters - GroupId: {GroupId}, TeamId: {TeamId}, Phase: {Phase}, Status: {Status}",
             groupId, teamId, phase, status);
 
-        var result = await _matchService.GetMatchesAsync(
-            groupId, teamId, stadiumId, phase, status, dateFrom, dateTo,
-            pageNumber, pageSize, cancellationToken);
+        var result = await _matchService.GetAllMatchesAsync(
+            pageNumber, pageSize, phase, status, groupId, stadiumId, dateFrom, dateTo,
+            cancellationToken);
 
         return Ok(result);
     }
@@ -174,26 +174,11 @@ public class MatchesController : ControllerBase
     {
         _logger.LogInformation("Updating match with ID: {MatchId}", id);
 
-        // Map UpdateMatchDto to CreateMatchDto for service call
-        var createMatchDto = new CreateMatchDto
-        {
-            HomeTeamId = updateMatchDto.HomeTeamId,
-            AwayTeamId = updateMatchDto.AwayTeamId,
-            StadiumId = updateMatchDto.StadiumId,
-            GroupId = updateMatchDto.GroupId,
-            MatchDate = updateMatchDto.MatchDate,
-            Phase = updateMatchDto.Phase
-        };
-
-        var match = await _matchService.UpdateMatchAsync(id, createMatchDto, cancellationToken);
-
-        if (match == null)
-        {
-            _logger.LogWarning("Match with ID {MatchId} not found for update", id);
-            return NotFound(new { message = $"Match with ID {id} not found" });
-        }
-
-        return Ok(match);
+        // Note: There's no UpdateMatchAsync in the service interface
+        // Matches should be updated through UpdateMatchResultAsync or UpdateMatchStatusAsync
+        // For now, we'll return a message indicating this endpoint is not implemented
+        _logger.LogWarning("UpdateMatch endpoint called but not implemented in service");
+        return BadRequest(new { message = "To update a match, use the /result endpoint to update the result or /status endpoint to update the status" });
     }
 
     /// <summary>

@@ -29,7 +29,7 @@ public class StandingsController : ControllerBase
     {
         _logger.LogInformation("Getting standings for group ID: {GroupId}", groupId);
 
-        var standings = await _standingService.GetGroupStandingsAsync(groupId, cancellationToken);
+        var standings = await _standingService.GetStandingsByGroupAsync(groupId, cancellationToken);
 
         if (standings == null || !standings.Any())
         {
@@ -50,7 +50,7 @@ public class StandingsController : ControllerBase
     {
         _logger.LogInformation("Getting all group stage standings");
 
-        var standings = await _standingService.GetAllStandingsAsync(cancellationToken);
+        var standings = await _standingService.GetTopTeamsAsync(48, cancellationToken); // Get all teams
         return Ok(standings);
     }
 
@@ -66,7 +66,7 @@ public class StandingsController : ControllerBase
     {
         _logger.LogInformation("Getting standing for team ID: {TeamId}", teamId);
 
-        var standing = await _standingService.GetTeamStandingAsync(teamId, cancellationToken);
+        var standing = await _standingService.GetStandingByTeamAsync(teamId, cancellationToken);
 
         if (standing == null)
         {
@@ -121,7 +121,7 @@ public class StandingsController : ControllerBase
     {
         _logger.LogInformation("Getting qualified teams for group ID: {GroupId}", groupId);
 
-        var standings = await _standingService.GetGroupStandingsAsync(groupId, cancellationToken);
+        var standings = await _standingService.GetQualifiedTeamsFromGroupAsync(groupId, 2, cancellationToken);
 
         if (standings == null || !standings.Any())
         {
@@ -129,9 +129,7 @@ public class StandingsController : ControllerBase
             return NotFound(new { message = $"No standings found for group {groupId}" });
         }
 
-        // Return top 2 teams (qualified for knockout stage)
-        var qualifiedTeams = standings.Take(2);
-        return Ok(qualifiedTeams);
+        return Ok(standings);
     }
 
     /// <summary>
@@ -144,7 +142,7 @@ public class StandingsController : ControllerBase
     {
         _logger.LogInformation("Getting standings summary");
 
-        var allStandings = await _standingService.GetAllStandingsAsync(cancellationToken);
+        var allStandings = await _standingService.GetTopTeamsAsync(48, cancellationToken); // Get all teams
 
         var summary = new
         {

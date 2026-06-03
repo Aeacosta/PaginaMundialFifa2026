@@ -6,6 +6,7 @@ using WorldCup2026.Application.Services;
 using WorldCup2026.Application.Validators.Team;
 using WorldCup2026.Domain.Interfaces;
 using WorldCup2026.Infrastructure.Data;
+using WorldCup2026.Infrastructure.Data.Seeding;
 using WorldCup2026.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,9 +16,9 @@ builder.Services.AddControllers();
 
 // Configure Database Context
 builder.Services.AddDbContext<WorldCupDbContext>(options =>
-    options.UseNpgsql(
+    options.UseSqlite(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        npgsqlOptions => npgsqlOptions.MigrationsAssembly("WorldCup2026.Infrastructure")
+        sqliteOptions => sqliteOptions.MigrationsAssembly("WorldCup2026.Infrastructure")
     )
 );
 
@@ -44,6 +45,12 @@ builder.Services.AddScoped<IStadiumService, StadiumService>();
 builder.Services.AddScoped<IStandingService, StandingService>();
 builder.Services.AddScoped<IMatchService, MatchService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+
+// Register Data Seeders
+builder.Services.AddScoped<GroupSeeder>();
+builder.Services.AddScoped<StadiumSeeder>();
+builder.Services.AddScoped<TeamSeeder>();
+builder.Services.AddScoped<DataSeeder>();
 
 // Configure CORS
 builder.Services.AddCors(options =>
@@ -80,6 +87,18 @@ app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Add seeding endpoint for development
+if (app.Environment.IsDevelopment())
+{
+    app.MapPost("/api/seed", async (DataSeeder seeder) =>
+    {
+        await seeder.SeedAllAsync();
+        return Results.Ok(new { message = "Database seeded successfully" });
+    })
+    .WithName("SeedDatabase")
+    .WithOpenApi();
+}
 
 app.Run();
 
