@@ -44,8 +44,38 @@ export interface GroupDto {
   description?: string;
 }
 
+export interface CreateGroupDto {
+  name: string;
+  description?: string;
+}
+
+export interface UpdateGroupDto {
+  name: string;
+  description?: string;
+}
+
 export interface StadiumDto {
   id: number;
+  name: string;
+  city: string;
+  country: string;
+  capacity: number;
+  imageUrl?: string;
+  latitude?: number;
+  longitude?: number;
+}
+
+export interface CreateStadiumDto {
+  name: string;
+  city: string;
+  country: string;
+  capacity: number;
+  imageUrl?: string;
+  latitude?: number;
+  longitude?: number;
+}
+
+export interface UpdateStadiumDto {
   name: string;
   city: string;
   country: string;
@@ -74,6 +104,27 @@ export interface MatchDto {
   result?: MatchResultDto;
 }
 
+export interface CreateMatchDto {
+  homeTeamId: number;
+  awayTeamId: number;
+  stadiumId: number;
+  matchDate: string;
+  phase: MatchPhase;
+  round?: number;
+  groupId?: number;
+}
+
+export interface UpdateMatchDto {
+  homeTeamId: number;
+  awayTeamId: number;
+  stadiumId: number;
+  matchDate: string;
+  phase: MatchPhase;
+  round?: number;
+  groupId?: number;
+  status: MatchStatus;
+}
+
 export interface MatchResultDto {
   id: number;
   matchId: number;
@@ -83,6 +134,13 @@ export interface MatchResultDto {
   awayTeamPenalties?: number;
   winnerTeamId?: number;
   winnerTeamName?: string;
+}
+
+export interface UpdateMatchResultDto {
+  homeTeamScore: number;
+  awayTeamScore: number;
+  homeTeamPenalties?: number;
+  awayTeamPenalties?: number;
 }
 
 export interface StandingDto {

@@ -42,4 +42,7 @@ apiClient.interceptors.response.use(
   }
 );
 
+// Default export
+export default apiClient;
+
 // Made with Bob
