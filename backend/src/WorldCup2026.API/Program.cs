@@ -52,6 +52,7 @@ builder.Services.AddScoped<StadiumSeeder>();
 builder.Services.AddScoped<TeamSeeder>();
 builder.Services.AddScoped<StandingSeeder>();
 builder.Services.AddScoped<MatchSeeder>();
+builder.Services.AddScoped<JsonMatchSeeder>();
 builder.Services.AddScoped<DataSeeder>();
 
 // Configure CORS

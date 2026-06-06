@@ -15,6 +15,30 @@ public class MatchRepository : Repository<Match>, IMatchRepository
     {
     }
 
+    public override async Task<IEnumerable<Match>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(m => m.HomeTeam)
+            .Include(m => m.AwayTeam)
+            .Include(m => m.Stadium)
+            .Include(m => m.Group)
+            .Include(m => m.Result)
+            .OrderBy(m => m.MatchDate)
+            .ToListAsync(cancellationToken);
+    }
+
+    public override async Task<Match?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(m => m.HomeTeam)
+            .Include(m => m.AwayTeam)
+            .Include(m => m.Stadium)
+            .Include(m => m.Group)
+            .Include(m => m.Result)
+                .ThenInclude(r => r!.WinnerTeam)
+            .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
+    }
+
     public async Task<Match?> GetWithDetailsAsync(int matchId, CancellationToken cancellationToken = default)
     {
         return await _dbSet

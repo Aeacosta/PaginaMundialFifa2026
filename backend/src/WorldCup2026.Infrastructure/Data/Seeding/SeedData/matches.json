@@ -1,0 +1,140 @@
+{
+  "matches": [
+    {
+      "homeTeamCode": "MEX",
+      "awayTeamCode": "RSA",
+      "stadiumName": "MetLife Stadium",
+      "groupName": "Group A",
+      "phase": "GroupStage",
+      "round": 1,
+      "matchDate": "2026-06-11T18:00:00Z",
+      "status": "Scheduled"
+    },
+    {
+      "homeTeamCode": "KOR",
+      "awayTeamCode": "CZE",
+      "stadiumName": "BMO Field",
+      "groupName": "Group A",
+      "phase": "GroupStage",
+      "round": 1,
+      "matchDate": "2026-06-11T21:00:00Z",
+      "status": "Scheduled"
+    },
+    {
+      "homeTeamCode": "MEX",
+      "awayTeamCode": "KOR",
+      "stadiumName": "SoFi Stadium",
+      "groupName": "Group A",
+      "phase": "GroupStage",
+      "round": 2,
+      "matchDate": "2026-06-15T18:00:00Z",
+      "status": "Scheduled"
+    },
+    {
+      "homeTeamCode": "RSA",
+      "awayTeamCode": "CZE",
+      "stadiumName": "Estadio Azteca",
+      "groupName": "Group A",
+      "phase": "GroupStage",
+      "round": 2,
+      "matchDate": "2026-06-15T21:00:00Z",
+      "status": "Scheduled"
+    },
+    {
+      "homeTeamCode": "MEX",
+      "awayTeamCode": "CZE",
+      "stadiumName": "AT&T Stadium",
+      "groupName": "Group A",
+      "phase": "GroupStage",
+      "round": 3,
+      "matchDate": "2026-06-19T18:00:00Z",
+      "status": "Scheduled"
+    },
+    {
+      "homeTeamCode": "RSA",
+      "awayTeamCode": "KOR",
+      "stadiumName": "Estadio BBVA",
+      "groupName": "Group A",
+      "phase": "GroupStage",
+      "round": 3,
+      "matchDate": "2026-06-19T18:00:00Z",
+      "status": "Scheduled"
+    },
+    {
+      "homeTeamCode": "BRA",
+      "awayTeamCode": "MAR",
+      "stadiumName": "MetLife Stadium",
+      "groupName": "Group C",
+      "phase": "GroupStage",
+      "round": 1,
+      "matchDate": "2026-06-12T18:00:00Z",
+      "status": "Completed",
+      "result": {
+        "homeTeamScore": 2,
+        "awayTeamScore": 1,
+        "homeTeamPenalties": null,
+        "awayTeamPenalties": null,
+        "homeTeamExtraTimeScore": null,
+        "awayTeamExtraTimeScore": null
+      }
+    },
+    {
+      "homeTeamCode": "HAI",
+      "awayTeamCode": "SCO",
+      "stadiumName": "Hard Rock Stadium",
+      "groupName": "Group C",
+      "phase": "GroupStage",
+      "round": 1,
+      "matchDate": "2026-06-12T21:00:00Z",
+      "status": "Completed",
+      "result": {
+        "homeTeamScore": 0,
+        "awayTeamScore": 0,
+        "homeTeamPenalties": null,
+        "awayTeamPenalties": null,
+        "homeTeamExtraTimeScore": null,
+        "awayTeamExtraTimeScore": null
+      }
+    },
+    {
+      "homeTeamCode": "TBD1",
+      "awayTeamCode": "TBD2",
+      "stadiumName": "MetLife Stadium",
+      "groupName": null,
+      "phase": "RoundOf16",
+      "round": 1,
+      "matchDate": "2026-07-01T18:00:00Z",
+      "status": "Scheduled"
+    },
+    {
+      "homeTeamCode": "TBD3",
+      "awayTeamCode": "TBD4",
+      "stadiumName": "SoFi Stadium",
+      "groupName": null,
+      "phase": "QuarterFinals",
+      "round": 1,
+      "matchDate": "2026-07-09T18:00:00Z",
+      "status": "Scheduled"
+    },
+    {
+      "homeTeamCode": "TBD5",
+      "awayTeamCode": "TBD6",
+      "stadiumName": "AT&T Stadium",
+      "groupName": null,
+      "phase": "SemiFinals",
+      "round": 1,
+      "matchDate": "2026-07-13T18:00:00Z",
+      "status": "Scheduled"
+    },
+    {
+      "homeTeamCode": "TBD7",
+      "awayTeamCode": "TBD8",
+      "stadiumName": "MetLife Stadium",
+      "groupName": null,
+      "phase": "Final",
+      "round": 1,
+      "matchDate": "2026-07-19T18:00:00Z",
+      "status": "Scheduled"
+    }
+  ]
+}

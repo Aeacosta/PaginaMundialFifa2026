@@ -24,4 +24,10 @@
     <ProjectReference Include="..\WorldCup2026.Domain\WorldCup2026.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\Seeding\SeedData\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

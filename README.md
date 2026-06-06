@@ -381,21 +381,84 @@ WorldCup2026/
 
 ## 🧪 Testing
 
-### Backend Tests
+### Backend Unit Tests ✅
+
+The backend has **178 comprehensive unit tests** covering all services and controllers with **100% pass rate**.
+
+#### Quick Test Run
 ```bash
-cd backend
+# From project root
+cd backend/src/WorldCup2026.Tests
 dotnet test
 ```
 
-### Frontend Tests
+#### Detailed Test Run with Verbosity
+```bash
+cd backend/src/WorldCup2026.Tests
+dotnet test --verbosity normal
+```
+
+#### Run Specific Test Class
+```bash
+# Run only TeamServiceTests
+dotnet test --filter "FullyQualifiedName~TeamServiceTests"
+
+# Run only GroupsControllerTests
+dotnet test --filter "FullyQualifiedName~GroupsControllerTests"
+```
+
+#### Test Coverage Summary
+
+**Service Tests (88 tests)**:
+- `TeamServiceTests` - 10 tests (CRUD, validation, filters)
+- `GroupServiceTests` - 15 tests (group management, team assignments)
+- `StadiumServiceTests` - 16 tests (stadium CRUD, filters, scheduled matches)
+- `MatchServiceTests` - 23 tests (match management, result updates, status transitions)
+- `StandingServiceTests` - 13 tests (standings calculation, recalculation)
+- `DashboardServiceTests` - 11 tests (statistics, top teams, scorers)
+
+**Controller Tests (90 tests)**:
+- `TeamsControllerTests` - 10 tests (HTTP endpoints, status codes)
+- `GroupsControllerTests` - 17 tests (group endpoints with standings)
+- `StadiumsControllerTests` - 17 tests (stadium endpoints with filters)
+- `MatchesControllerTests` - 20 tests (match endpoints, result updates)
+- `StandingsControllerTests` - 12 tests (standings endpoints, recalculation)
+- `DashboardControllerTests` - 13 tests (dashboard statistics endpoints)
+
+#### Test Results
+```
+Total tests: 178
+     Passed: 178 (100%)
+     Failed: 0
+   Duration: ~811ms
+```
+
+#### Test Technologies
+- **MSTest** - Testing framework
+- **Moq 4.20.72** - Mocking framework for dependencies
+- **FluentAssertions 8.10.0** - Readable assertion library
+- **AAA Pattern** - Arrange-Act-Assert test structure
+
+#### Example Test Output
+```
+Test run for WorldCup2026.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   178, Skipped:     0, Total:   178, Duration: 811 ms
+```
+
+### Frontend Tests ⏳
+
+Frontend testing with Vitest and React Testing Library is planned for future implementation.
+
 ```bash
 cd frontend
-npm test
+npm test  # Coming soon
 ```
 
 ## 📊 Current Implementation Status
 
-### ✅ Completed (63% - 57/90 hours)
+### ✅ Completed (77% - 69.5/90 hours)
 - ✅ **Backend API** - 100% complete
   - 6 controllers with 60 endpoints
   - Clean Architecture implementation
@@ -415,12 +478,17 @@ npm test
   - 6 entity types with relationships
   - Seeding with real FIFA World Cup 2026 data
 
-### ⏳ Pending (37% - 33 hours)
-- ⏳ Backend unit tests (12 hours)
+- ✅ **Backend Unit Tests** - 100% complete
+  - 178 comprehensive tests (88 service + 90 controller)
+  - 100% pass rate
+  - MSTest with Moq and FluentAssertions
+  - Full coverage of business logic and API endpoints
+
+### ⏳ Pending (23% - 20.5 hours)
 - ⏳ Frontend unit tests (8 hours)
 - ⏳ Docker & Deployment (6 hours)
 - ⏳ Documentation (4 hours)
-- ⏳ Final polish (3 hours)
+- ⏳ Final polish (2.5 hours)
 
 ## 📖 API Documentation
 
@@ -454,12 +522,13 @@ This project demonstrates:
 
 ## 📝 Development Status
 
-- ✅ **Planning Phase:** Complete
+- ✅ **Planning Phase:** Complete (100%)
 - ✅ **Backend Implementation:** Complete (100%)
 - ✅ **Frontend Implementation:** Complete (100%)
 - ✅ **Database Setup:** Complete (100%)
-- ⏳ **Testing Phase:** In Progress (5%)
-- ⏳ **Deployment Phase:** Pending
+- ✅ **Backend Testing:** Complete (100% - 178 tests passing)
+- ⏳ **Frontend Testing:** Pending (0%)
+- ⏳ **Deployment Phase:** Pending (0%)
 
 ## 🤝 Contributing
 

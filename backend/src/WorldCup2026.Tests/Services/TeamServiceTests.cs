@@ -7,6 +7,7 @@ using WorldCup2026.Application.Services;
 using WorldCup2026.Domain.Entities;
 using WorldCup2026.Domain.Enums;
 using WorldCup2026.Domain.Interfaces;
+using DomainMatch = WorldCup2026.Domain.Entities.Match;
 
 namespace WorldCup2026.Tests.Services;
 
@@ -26,7 +27,7 @@ public class TeamServiceTests
     }
 
     [TestMethod]
-    public async Task GetAllAsync_ShouldReturnAllTeams()
+    public async Task GetAllTeamsAsync_ShouldReturnPagedTeams()
     {
         // Arrange
         var teams = new List<Team>
@@ -37,67 +38,69 @@ public class TeamServiceTests
 
         var teamDtos = new List<TeamDto>
         {
-            new TeamDto { Id = 1, Name = "Argentina", Code = "ARG", Confederation = "CONMEBOL" },
-            new TeamDto { Id = 2, Name = "Brazil", Code = "BRA", Confederation = "CONMEBOL" }
+            new TeamDto { Id = 1, Name = "Argentina", Code = "ARG", Confederation = Confederation.CONMEBOL },
+            new TeamDto { Id = 2, Name = "Brazil", Code = "BRA", Confederation = Confederation.CONMEBOL }
         };
 
-        _unitOfWorkMock.Setup(u => u.Teams.GetAllAsync()).ReturnsAsync(teams);
-        _mapperMock.Setup(m => m.Map<IEnumerable<TeamDto>>(teams)).Returns(teamDtos);
+        _unitOfWorkMock.Setup(u => u.Teams.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync(teams);
+        _mapperMock.Setup(m => m.Map<List<TeamDto>>(It.IsAny<List<Team>>())).Returns(teamDtos);
 
         // Act
-        var result = await _teamService.GetAllAsync();
+        var result = await _teamService.GetAllTeamsAsync();
 
         // Assert
         result.Should().NotBeNull();
-        result.Should().HaveCount(2);
-        result.Should().BeEquivalentTo(teamDtos);
-        _unitOfWorkMock.Verify(u => u.Teams.GetAllAsync(), Times.Once);
+        result.Items.Should().HaveCount(2);
+        result.TotalCount.Should().Be(2);
+        result.PageNumber.Should().Be(1);
+        result.PageSize.Should().Be(10);
+        _unitOfWorkMock.Verify(u => u.Teams.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [TestMethod]
-    public async Task GetByIdAsync_WithValidId_ShouldReturnTeam()
+    public async Task GetTeamByIdAsync_WithValidId_ShouldReturnTeam()
     {
         // Arrange
         var teamId = 1;
         var team = new Team { Id = teamId, Name = "Argentina", Code = "ARG", Confederation = Confederation.CONMEBOL };
-        var teamDto = new TeamDto { Id = teamId, Name = "Argentina", Code = "ARG", Confederation = "CONMEBOL" };
+        var teamDto = new TeamDto { Id = teamId, Name = "Argentina", Code = "ARG", Confederation = Confederation.CONMEBOL };
 
-        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId)).ReturnsAsync(team);
+        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId, It.IsAny<CancellationToken>())).ReturnsAsync(team);
         _mapperMock.Setup(m => m.Map<TeamDto>(team)).Returns(teamDto);
 
         // Act
-        var result = await _teamService.GetByIdAsync(teamId);
+        var result = await _teamService.GetTeamByIdAsync(teamId);
 
         // Assert
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(teamDto);
-        _unitOfWorkMock.Verify(u => u.Teams.GetByIdAsync(teamId), Times.Once);
+        _unitOfWorkMock.Verify(u => u.Teams.GetByIdAsync(teamId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [TestMethod]
-    public async Task GetByIdAsync_WithInvalidId_ShouldReturnNull()
+    public async Task GetTeamByIdAsync_WithInvalidId_ShouldReturnNull()
     {
         // Arrange
         var teamId = 999;
-        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId)).ReturnsAsync((Team)null);
+        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId, It.IsAny<CancellationToken>())).ReturnsAsync((Team)null);
 
         // Act
-        var result = await _teamService.GetByIdAsync(teamId);
+        var result = await _teamService.GetTeamByIdAsync(teamId);
 
         // Assert
         result.Should().BeNull();
-        _unitOfWorkMock.Verify(u => u.Teams.GetByIdAsync(teamId), Times.Once);
+        _unitOfWorkMock.Verify(u => u.Teams.GetByIdAsync(teamId, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [TestMethod]
-    public async Task CreateAsync_WithValidData_ShouldCreateTeam()
+    public async Task CreateTeamAsync_WithValidData_ShouldCreateTeam()
     {
         // Arrange
         var createDto = new CreateTeamDto
         {
             Name = "Argentina",
             Code = "ARG",
-            Confederation = "CONMEBOL",
+            Confederation = Confederation.CONMEBOL,
             FifaRanking = 1,
             GroupId = 1
         };
@@ -121,33 +124,39 @@ public class TeamServiceTests
             GroupId = 1
         };
 
+        var group = new Group { Id = 1, Name = "Group A" };
+
         var teamDto = new TeamDto
         {
             Id = 1,
             Name = "Argentina",
             Code = "ARG",
-            Confederation = "CONMEBOL",
+            Confederation = Confederation.CONMEBOL,
             FifaRanking = 1,
             GroupId = 1
         };
 
+        _unitOfWorkMock.Setup(u => u.Teams.FindAsync(It.IsAny<System.Linq.Expressions.Expression<Func<Team, bool>>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Team>());
+        _unitOfWorkMock.Setup(u => u.Groups.GetByIdAsync(1, It.IsAny<CancellationToken>())).ReturnsAsync(group);
         _mapperMock.Setup(m => m.Map<Team>(createDto)).Returns(team);
-        _unitOfWorkMock.Setup(u => u.Teams.AddAsync(team)).ReturnsAsync(createdTeam);
-        _unitOfWorkMock.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
+        _unitOfWorkMock.Setup(u => u.Teams.AddAsync(It.IsAny<Team>(), It.IsAny<CancellationToken>())).ReturnsAsync(team);
+        _unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
+        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(It.IsAny<int>(), It.IsAny<CancellationToken>())).ReturnsAsync(createdTeam);
         _mapperMock.Setup(m => m.Map<TeamDto>(createdTeam)).Returns(teamDto);
 
         // Act
-        var result = await _teamService.CreateAsync(createDto);
+        var result = await _teamService.CreateTeamAsync(createDto);
 
         // Assert
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(teamDto);
-        _unitOfWorkMock.Verify(u => u.Teams.AddAsync(It.IsAny<Team>()), Times.Once);
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+        _unitOfWorkMock.Verify(u => u.Teams.AddAsync(It.IsAny<Team>(), It.IsAny<CancellationToken>()), Times.Once);
+        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [TestMethod]
-    public async Task UpdateAsync_WithValidData_ShouldUpdateTeam()
+    public async Task UpdateTeamAsync_WithValidData_ShouldUpdateTeam()
     {
         // Arrange
         var teamId = 1;
@@ -155,7 +164,7 @@ public class TeamServiceTests
         {
             Name = "Argentina Updated",
             Code = "ARG",
-            Confederation = "CONMEBOL",
+            Confederation = Confederation.CONMEBOL,
             FifaRanking = 2,
             GroupId = 1
         };
@@ -180,89 +189,98 @@ public class TeamServiceTests
             GroupId = 1
         };
 
+        var group = new Group { Id = 1, Name = "Group A" };
+
         var teamDto = new TeamDto
         {
             Id = teamId,
             Name = "Argentina Updated",
             Code = "ARG",
-            Confederation = "CONMEBOL",
+            Confederation = Confederation.CONMEBOL,
             FifaRanking = 2,
             GroupId = 1
         };
 
-        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId)).ReturnsAsync(existingTeam);
+        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId, It.IsAny<CancellationToken>())).ReturnsAsync(existingTeam);
+        _unitOfWorkMock.Setup(u => u.Teams.FindAsync(It.IsAny<System.Linq.Expressions.Expression<Func<Team, bool>>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Team>());
+        _unitOfWorkMock.Setup(u => u.Groups.GetByIdAsync(1, It.IsAny<CancellationToken>())).ReturnsAsync(group);
         _mapperMock.Setup(m => m.Map(updateDto, existingTeam)).Returns(updatedTeam);
-        _unitOfWorkMock.Setup(u => u.Teams.Update(updatedTeam));
-        _unitOfWorkMock.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
+        _unitOfWorkMock.Setup(u => u.Teams.Update(It.IsAny<Team>()));
+        _unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
+        _unitOfWorkMock.SetupSequence(u => u.Teams.GetByIdAsync(teamId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingTeam)
+            .ReturnsAsync(updatedTeam);
         _mapperMock.Setup(m => m.Map<TeamDto>(updatedTeam)).Returns(teamDto);
 
         // Act
-        var result = await _teamService.UpdateAsync(teamId, updateDto);
+        var result = await _teamService.UpdateTeamAsync(teamId, updateDto);
 
         // Assert
         result.Should().NotBeNull();
         result.Should().BeEquivalentTo(teamDto);
         _unitOfWorkMock.Verify(u => u.Teams.Update(It.IsAny<Team>()), Times.Once);
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [TestMethod]
-    public async Task UpdateAsync_WithInvalidId_ShouldReturnNull()
+    public async Task UpdateTeamAsync_WithInvalidId_ShouldThrowException()
     {
         // Arrange
         var teamId = 999;
-        var updateDto = new UpdateTeamDto { Name = "Test" };
-        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId)).ReturnsAsync((Team)null);
+        var updateDto = new UpdateTeamDto { Name = "Test", Code = "TST", Confederation = Confederation.UEFA };
+        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId, It.IsAny<CancellationToken>())).ReturnsAsync((Team)null);
 
-        // Act
-        var result = await _teamService.UpdateAsync(teamId, updateDto);
-
-        // Assert
-        result.Should().BeNull();
+        // Act & Assert
+        var act = async () => await _teamService.UpdateTeamAsync(teamId, updateDto);
+        await act.Should().ThrowAsync<InvalidOperationException>();
+        
         _unitOfWorkMock.Verify(u => u.Teams.Update(It.IsAny<Team>()), Times.Never);
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Never);
+        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [TestMethod]
-    public async Task DeleteAsync_WithValidId_ShouldReturnTrue()
+    public async Task DeleteTeamAsync_WithValidId_ShouldReturnTrue()
     {
         // Arrange
         var teamId = 1;
         var team = new Team { Id = teamId, Name = "Argentina" };
-        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId)).ReturnsAsync(team);
+        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId, It.IsAny<CancellationToken>())).ReturnsAsync(team);
+        _unitOfWorkMock.Setup(u => u.Matches.FindAsync(It.IsAny<System.Linq.Expressions.Expression<Func<DomainMatch, bool>>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<DomainMatch>());
         _unitOfWorkMock.Setup(u => u.Teams.Delete(team));
-        _unitOfWorkMock.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
+        _unitOfWorkMock.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(1);
 
         // Act
-        var result = await _teamService.DeleteAsync(teamId);
+        var result = await _teamService.DeleteTeamAsync(teamId);
 
         // Assert
         result.Should().BeTrue();
         _unitOfWorkMock.Verify(u => u.Teams.Delete(team), Times.Once);
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Once);
+        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [TestMethod]
-    public async Task DeleteAsync_WithInvalidId_ShouldReturnFalse()
+    public async Task DeleteTeamAsync_WithInvalidId_ShouldReturnFalse()
     {
         // Arrange
         var teamId = 999;
-        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId)).ReturnsAsync((Team)null);
+        _unitOfWorkMock.Setup(u => u.Teams.GetByIdAsync(teamId, It.IsAny<CancellationToken>())).ReturnsAsync((Team)null);
 
         // Act
-        var result = await _teamService.DeleteAsync(teamId);
+        var result = await _teamService.DeleteTeamAsync(teamId);
 
         // Assert
         result.Should().BeFalse();
         _unitOfWorkMock.Verify(u => u.Teams.Delete(It.IsAny<Team>()), Times.Never);
-        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(), Times.Never);
+        _unitOfWorkMock.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [TestMethod]
-    public async Task GetByConfederationAsync_ShouldReturnTeamsFromConfederation()
+    public async Task GetTeamsByConfederationAsync_ShouldReturnTeamsFromConfederation()
     {
         // Arrange
-        var confederation = "CONMEBOL";
+        var confederation = Confederation.CONMEBOL;
         var teams = new List<Team>
         {
             new Team { Id = 1, Name = "Argentina", Confederation = Confederation.CONMEBOL },
@@ -271,16 +289,16 @@ public class TeamServiceTests
 
         var teamDtos = new List<TeamDto>
         {
-            new TeamDto { Id = 1, Name = "Argentina", Confederation = "CONMEBOL" },
-            new TeamDto { Id = 2, Name = "Brazil", Confederation = "CONMEBOL" }
+            new TeamDto { Id = 1, Name = "Argentina", Confederation = Confederation.CONMEBOL },
+            new TeamDto { Id = 2, Name = "Brazil", Confederation = Confederation.CONMEBOL }
         };
 
-        _unitOfWorkMock.Setup(u => u.Teams.GetByConfederationAsync(Confederation.CONMEBOL))
+        _unitOfWorkMock.Setup(u => u.Teams.GetByConfederationAsync(confederation, It.IsAny<CancellationToken>()))
             .ReturnsAsync(teams);
         _mapperMock.Setup(m => m.Map<IEnumerable<TeamDto>>(teams)).Returns(teamDtos);
 
         // Act
-        var result = await _teamService.GetByConfederationAsync(confederation);
+        var result = await _teamService.GetTeamsByConfederationAsync(confederation);
 
         // Assert
         result.Should().NotBeNull();
@@ -289,7 +307,7 @@ public class TeamServiceTests
     }
 
     [TestMethod]
-    public async Task GetByGroupIdAsync_ShouldReturnTeamsInGroup()
+    public async Task GetTeamsByGroupAsync_ShouldReturnTeamsInGroup()
     {
         // Arrange
         var groupId = 1;
@@ -305,11 +323,11 @@ public class TeamServiceTests
             new TeamDto { Id = 2, Name = "Brazil", GroupId = groupId }
         };
 
-        _unitOfWorkMock.Setup(u => u.Teams.GetByGroupIdAsync(groupId)).ReturnsAsync(teams);
+        _unitOfWorkMock.Setup(u => u.Teams.GetByGroupIdAsync(groupId, It.IsAny<CancellationToken>())).ReturnsAsync(teams);
         _mapperMock.Setup(m => m.Map<IEnumerable<TeamDto>>(teams)).Returns(teamDtos);
 
         // Act
-        var result = await _teamService.GetByGroupIdAsync(groupId);
+        var result = await _teamService.GetTeamsByGroupAsync(groupId);
 
         // Assert
         result.Should().NotBeNull();

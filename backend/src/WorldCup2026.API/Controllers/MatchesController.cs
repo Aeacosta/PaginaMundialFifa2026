@@ -113,6 +113,21 @@ public class MatchesController : ControllerBase
     }
 
     /// <summary>
+    /// Get matches by status
+    /// </summary>
+    [HttpGet("status/{status}")]
+    [ProducesResponseType(typeof(IEnumerable<MatchDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<MatchDto>>> GetMatchesByStatus(
+        MatchStatus status,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.LogInformation("Getting matches for status: {Status}", status);
+
+        var matches = await _matchService.GetMatchesByStatusAsync(status, cancellationToken);
+        return Ok(matches);
+    }
+
+    /// <summary>
     /// Get upcoming matches
     /// </summary>
     [HttpGet("upcoming")]

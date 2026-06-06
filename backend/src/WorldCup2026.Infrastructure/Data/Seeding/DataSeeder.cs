@@ -1,5 +1,7 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 
 namespace WorldCup2026.Infrastructure.Data.Seeding;
 
@@ -10,17 +12,23 @@ public class DataSeeder
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<DataSeeder> _logger;
+    private readonly IConfiguration _configuration;
 
-    public DataSeeder(IServiceProvider serviceProvider, ILogger<DataSeeder> logger)
+    public DataSeeder(
+        IServiceProvider serviceProvider,
+        ILogger<DataSeeder> logger,
+        IConfiguration configuration)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
+        _configuration = configuration;
     }
 
     /// <summary>
     /// Seeds all data in the correct order
     /// </summary>
-    public async Task SeedAllAsync(CancellationToken cancellationToken = default)
+    /// <param name="useJsonForMatches">Override to force JSON seeding for matches</param>
+    public async Task SeedAllAsync(bool? useJsonForMatches = null, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -33,7 +41,7 @@ public class DataSeeder
             await SeedStadiumsAsync(scope, cancellationToken);
             await SeedTeamsAsync(scope, cancellationToken);
             await SeedStandingsAsync(scope, cancellationToken);
-            await SeedMatchesAsync(scope, cancellationToken);
+            await SeedMatchesAsync(scope, useJsonForMatches, cancellationToken);
 
             _logger.LogInformation("Database seeding completed successfully");
         }
@@ -76,11 +84,26 @@ public class DataSeeder
         _logger.LogInformation("Standings seeded successfully");
     }
 
-    private async Task SeedMatchesAsync(IServiceScope scope, CancellationToken cancellationToken)
+    private async Task SeedMatchesAsync(IServiceScope scope, bool? useJsonForMatches, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Seeding matches...");
-        var seeder = scope.ServiceProvider.GetRequiredService<MatchSeeder>();
-        await seeder.SeedAsync(cancellationToken);
+        
+        // Check configuration or parameter to determine seeding method
+        var useJson = useJsonForMatches ?? bool.TryParse(_configuration["Seeding:UseJsonForMatches"], out var configValue) && configValue;
+        
+        if (useJson)
+        {
+            _logger.LogInformation("Using JSON-based match seeding");
+            var jsonSeeder = scope.ServiceProvider.GetRequiredService<JsonMatchSeeder>();
+            await jsonSeeder.SeedAsync(cancellationToken);
+        }
+        else
+        {
+            _logger.LogInformation("Using code-based match seeding");
+            var seeder = scope.ServiceProvider.GetRequiredService<MatchSeeder>();
+            await seeder.SeedAsync(cancellationToken);
+        }
+        
         _logger.LogInformation("Matches seeded successfully");
     }
 }

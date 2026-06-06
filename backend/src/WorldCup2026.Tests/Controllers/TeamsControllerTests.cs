@@ -1,10 +1,14 @@
 using FluentAssertions;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using WorldCup2026.API.Controllers;
+using WorldCup2026.Application.DTOs.Common;
 using WorldCup2026.Application.DTOs.Team;
 using WorldCup2026.Application.Interfaces;
+using WorldCup2026.Domain.Enums;
 
 namespace WorldCup2026.Tests.Controllers;
 
@@ -12,75 +16,91 @@ namespace WorldCup2026.Tests.Controllers;
 public class TeamsControllerTests
 {
     private Mock<ITeamService> _teamServiceMock;
+    private Mock<IValidator<CreateTeamDto>> _createValidatorMock;
+    private Mock<IValidator<UpdateTeamDto>> _updateValidatorMock;
     private TeamsController _controller;
 
     [TestInitialize]
     public void Setup()
     {
         _teamServiceMock = new Mock<ITeamService>();
-        _controller = new TeamsController(_teamServiceMock.Object);
+        _createValidatorMock = new Mock<IValidator<CreateTeamDto>>();
+        _updateValidatorMock = new Mock<IValidator<UpdateTeamDto>>();
+        _controller = new TeamsController(
+            _teamServiceMock.Object,
+            _createValidatorMock.Object,
+            _updateValidatorMock.Object);
     }
 
     [TestMethod]
-    public async Task GetAll_ShouldReturnOkWithTeams()
+    public async Task GetAllTeams_ShouldReturnOkWithPagedTeams()
     {
         // Arrange
-        var teams = new List<TeamDto>
+        var pagedResult = new PagedResult<TeamDto>
         {
-            new TeamDto { Id = 1, Name = "Argentina", Code = "ARG" },
-            new TeamDto { Id = 2, Name = "Brazil", Code = "BRA" }
+            Items = new List<TeamDto>
+            {
+                new TeamDto { Id = 1, Name = "Argentina", Code = "ARG" },
+                new TeamDto { Id = 2, Name = "Brazil", Code = "BRA" }
+            },
+            TotalCount = 2,
+            PageNumber = 1,
+            PageSize = 10
         };
-        _teamServiceMock.Setup(s => s.GetAllAsync()).ReturnsAsync(teams);
+        _teamServiceMock.Setup(s => s.GetAllTeamsAsync(
+            It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Confederation?>(),
+            It.IsAny<int?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(pagedResult);
 
         // Act
-        var result = await _controller.GetAll();
+        var result = await _controller.GetAllTeams();
 
         // Assert
-        result.Result.Should().BeOfType<OkObjectResult>();
-        var okResult = result.Result as OkObjectResult;
-        okResult.Value.Should().BeEquivalentTo(teams);
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = result as OkObjectResult;
+        okResult.Value.Should().BeEquivalentTo(pagedResult);
     }
 
     [TestMethod]
-    public async Task GetById_WithValidId_ShouldReturnOkWithTeam()
+    public async Task GetTeamById_WithValidId_ShouldReturnOkWithTeam()
     {
         // Arrange
         var teamId = 1;
         var team = new TeamDto { Id = teamId, Name = "Argentina", Code = "ARG" };
-        _teamServiceMock.Setup(s => s.GetByIdAsync(teamId)).ReturnsAsync(team);
+        _teamServiceMock.Setup(s => s.GetTeamByIdAsync(teamId, It.IsAny<CancellationToken>())).ReturnsAsync(team);
 
         // Act
-        var result = await _controller.GetById(teamId);
+        var result = await _controller.GetTeamById(teamId);
 
         // Assert
-        result.Result.Should().BeOfType<OkObjectResult>();
-        var okResult = result.Result as OkObjectResult;
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = result as OkObjectResult;
         okResult.Value.Should().BeEquivalentTo(team);
     }
 
     [TestMethod]
-    public async Task GetById_WithInvalidId_ShouldReturnNotFound()
+    public async Task GetTeamById_WithInvalidId_ShouldReturnNotFound()
     {
         // Arrange
         var teamId = 999;
-        _teamServiceMock.Setup(s => s.GetByIdAsync(teamId)).ReturnsAsync((TeamDto)null);
+        _teamServiceMock.Setup(s => s.GetTeamByIdAsync(teamId, It.IsAny<CancellationToken>())).ReturnsAsync((TeamDto)null);
 
         // Act
-        var result = await _controller.GetById(teamId);
+        var result = await _controller.GetTeamById(teamId);
 
         // Assert
-        result.Result.Should().BeOfType<NotFoundResult>();
+        result.Should().BeOfType<NotFoundObjectResult>();
     }
 
     [TestMethod]
-    public async Task Create_WithValidData_ShouldReturnCreatedAtAction()
+    public async Task CreateTeam_WithValidData_ShouldReturnCreatedAtAction()
     {
         // Arrange
         var createDto = new CreateTeamDto
         {
             Name = "Argentina",
             Code = "ARG",
-            Confederation = "CONMEBOL",
+            Confederation = Confederation.CONMEBOL,
             FifaRanking = 1,
             GroupId = 1
         };
@@ -90,26 +110,28 @@ public class TeamsControllerTests
             Id = 1,
             Name = "Argentina",
             Code = "ARG",
-            Confederation = "CONMEBOL",
+            Confederation = Confederation.CONMEBOL,
             FifaRanking = 1,
             GroupId = 1
         };
 
-        _teamServiceMock.Setup(s => s.CreateAsync(createDto)).ReturnsAsync(createdTeam);
+        _createValidatorMock.Setup(v => v.ValidateAsync(createDto, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
+        _teamServiceMock.Setup(s => s.CreateTeamAsync(createDto, It.IsAny<CancellationToken>())).ReturnsAsync(createdTeam);
 
         // Act
-        var result = await _controller.Create(createDto);
+        var result = await _controller.CreateTeam(createDto);
 
         // Assert
-        result.Result.Should().BeOfType<CreatedAtActionResult>();
-        var createdResult = result.Result as CreatedAtActionResult;
-        createdResult.ActionName.Should().Be(nameof(_controller.GetById));
+        result.Should().BeOfType<CreatedAtActionResult>();
+        var createdResult = result as CreatedAtActionResult;
+        createdResult.ActionName.Should().Be(nameof(_controller.GetTeamById));
         createdResult.RouteValues["id"].Should().Be(createdTeam.Id);
         createdResult.Value.Should().BeEquivalentTo(createdTeam);
     }
 
     [TestMethod]
-    public async Task Update_WithValidData_ShouldReturnOkWithUpdatedTeam()
+    public async Task UpdateTeam_WithValidData_ShouldReturnOkWithUpdatedTeam()
     {
         // Arrange
         var teamId = 1;
@@ -117,7 +139,7 @@ public class TeamsControllerTests
         {
             Name = "Argentina Updated",
             Code = "ARG",
-            Confederation = "CONMEBOL",
+            Confederation = Confederation.CONMEBOL,
             FifaRanking = 2,
             GroupId = 1
         };
@@ -127,88 +149,93 @@ public class TeamsControllerTests
             Id = teamId,
             Name = "Argentina Updated",
             Code = "ARG",
-            Confederation = "CONMEBOL",
+            Confederation = Confederation.CONMEBOL,
             FifaRanking = 2,
             GroupId = 1
         };
 
-        _teamServiceMock.Setup(s => s.UpdateAsync(teamId, updateDto)).ReturnsAsync(updatedTeam);
+        _updateValidatorMock.Setup(v => v.ValidateAsync(updateDto, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
+        _teamServiceMock.Setup(s => s.UpdateTeamAsync(teamId, updateDto, It.IsAny<CancellationToken>())).ReturnsAsync(updatedTeam);
 
         // Act
-        var result = await _controller.Update(teamId, updateDto);
+        var result = await _controller.UpdateTeam(teamId, updateDto);
 
         // Assert
-        result.Result.Should().BeOfType<OkObjectResult>();
-        var okResult = result.Result as OkObjectResult;
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = result as OkObjectResult;
         okResult.Value.Should().BeEquivalentTo(updatedTeam);
     }
 
     [TestMethod]
-    public async Task Update_WithInvalidId_ShouldReturnNotFound()
+    public async Task UpdateTeam_WithInvalidId_ShouldReturnNotFound()
     {
         // Arrange
         var teamId = 999;
-        var updateDto = new UpdateTeamDto { Name = "Test" };
-        _teamServiceMock.Setup(s => s.UpdateAsync(teamId, updateDto)).ReturnsAsync((TeamDto)null);
+        var updateDto = new UpdateTeamDto { Name = "Test", Code = "TST", Confederation = Confederation.UEFA };
+        
+        _updateValidatorMock.Setup(v => v.ValidateAsync(updateDto, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new ValidationResult());
+        _teamServiceMock.Setup(s => s.UpdateTeamAsync(teamId, updateDto, It.IsAny<CancellationToken>())).ReturnsAsync((TeamDto)null);
 
         // Act
-        var result = await _controller.Update(teamId, updateDto);
+        var result = await _controller.UpdateTeam(teamId, updateDto);
 
         // Assert
-        result.Result.Should().BeOfType<NotFoundResult>();
+        result.Should().BeOfType<NotFoundObjectResult>();
     }
 
     [TestMethod]
-    public async Task Delete_WithValidId_ShouldReturnNoContent()
+    public async Task DeleteTeam_WithValidId_ShouldReturnNoContent()
     {
         // Arrange
         var teamId = 1;
-        _teamServiceMock.Setup(s => s.DeleteAsync(teamId)).ReturnsAsync(true);
+        _teamServiceMock.Setup(s => s.DeleteTeamAsync(teamId, It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
         // Act
-        var result = await _controller.Delete(teamId);
+        var result = await _controller.DeleteTeam(teamId);
 
         // Assert
         result.Should().BeOfType<NoContentResult>();
     }
 
     [TestMethod]
-    public async Task Delete_WithInvalidId_ShouldReturnNotFound()
+    public async Task DeleteTeam_WithInvalidId_ShouldReturnNotFound()
     {
         // Arrange
         var teamId = 999;
-        _teamServiceMock.Setup(s => s.DeleteAsync(teamId)).ReturnsAsync(false);
+        _teamServiceMock.Setup(s => s.DeleteTeamAsync(teamId, It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
         // Act
-        var result = await _controller.Delete(teamId);
+        var result = await _controller.DeleteTeam(teamId);
 
         // Assert
-        result.Should().BeOfType<NotFoundResult>();
+        result.Should().BeOfType<NotFoundObjectResult>();
     }
 
     [TestMethod]
-    public async Task GetByConfederation_ShouldReturnOkWithTeams()
+    public async Task GetTeamsByConfederation_ShouldReturnOkWithTeams()
     {
         // Arrange
-        var confederation = "CONMEBOL";
+        var confederation = Confederation.CONMEBOL;
         var teams = new List<TeamDto>
         {
-            new TeamDto { Id = 1, Name = "Argentina", Confederation = confederation },
-            new TeamDto { Id = 2, Name = "Brazil", Confederation = confederation }
+            new TeamDto { Id = 1, Name = "Argentina", Confederation = Confederation.CONMEBOL },
+            new TeamDto { Id = 2, Name = "Brazil", Confederation = Confederation.CONMEBOL }
         };
-        _teamServiceMock.Setup(s => s.GetByConfederationAsync(confederation)).ReturnsAsync(teams);
+        _teamServiceMock.Setup(s => s.GetTeamsByConfederationAsync(confederation, It.IsAny<CancellationToken>())).ReturnsAsync(teams);
 
         // Act
-        var result = await _controller.GetByConfederation(confederation);
+        var result = await _controller.GetTeamsByConfederation(confederation);
 
         // Assert
-        result.Result.Should().BeOfType<OkObjectResult>();
-        var okResult = result.Result as OkObjectResult;
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = result as OkObjectResult;
         okResult.Value.Should().BeEquivalentTo(teams);
     }
 
     [TestMethod]
-    public async Task GetByGroup_ShouldReturnOkWithTeams()
+    public async Task GetTeamsByGroup_ShouldReturnOkWithTeams()
     {
         // Arrange
         var groupId = 1;
@@ -217,34 +244,14 @@ public class TeamsControllerTests
             new TeamDto { Id = 1, Name = "Argentina", GroupId = groupId },
             new TeamDto { Id = 2, Name = "Brazil", GroupId = groupId }
         };
-        _teamServiceMock.Setup(s => s.GetByGroupIdAsync(groupId)).ReturnsAsync(teams);
+        _teamServiceMock.Setup(s => s.GetTeamsByGroupAsync(groupId, It.IsAny<CancellationToken>())).ReturnsAsync(teams);
 
         // Act
-        var result = await _controller.GetByGroup(groupId);
+        var result = await _controller.GetTeamsByGroup(groupId);
 
         // Assert
-        result.Result.Should().BeOfType<OkObjectResult>();
-        var okResult = result.Result as OkObjectResult;
-        okResult.Value.Should().BeEquivalentTo(teams);
-    }
-
-    [TestMethod]
-    public async Task Search_ShouldReturnOkWithMatchingTeams()
-    {
-        // Arrange
-        var searchTerm = "Arg";
-        var teams = new List<TeamDto>
-        {
-            new TeamDto { Id = 1, Name = "Argentina", Code = "ARG" }
-        };
-        _teamServiceMock.Setup(s => s.SearchAsync(searchTerm)).ReturnsAsync(teams);
-
-        // Act
-        var result = await _controller.Search(searchTerm);
-
-        // Assert
-        result.Result.Should().BeOfType<OkObjectResult>();
-        var okResult = result.Result as OkObjectResult;
+        result.Should().BeOfType<OkObjectResult>();
+        var okResult = result as OkObjectResult;
         okResult.Value.Should().BeEquivalentTo(teams);
     }
 }
