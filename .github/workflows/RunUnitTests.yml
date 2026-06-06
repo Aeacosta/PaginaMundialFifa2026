@@ -20,14 +20,10 @@ jobs:
         dotnet-version: '10.0.x'
 
     - name: Restore Dependencies
-      run: dotnet restore
+      run: dotnet restore backend/WorldCup2026.slnx
 
-    - name: Build Project
-      run: |
-        cd backend/src/WorldCup2026.API
-        dotnet restore --project backend/src/WorldCup2026.API/WorldCup2026.API.csproj
-        dotnet ef database update
-        dotnet run
+    - name: Build Solution
+      run: dotnet build backend/WorldCup2026.slnx --configuration Release --no-restore
 
     - name: Run Tests
-      run: dotnet test --no-restore --configuration Release --verbosity normal
+      run: dotnet test backend/src/WorldCup2026.Tests/WorldCup2026.Tests.csproj --configuration Release --no-build --verbosity normal
