@@ -25,7 +25,7 @@ jobs:
     - name: Build Project
       run: |
         cd backend/src/WorldCup2026.API
-        dotnet restore
+        dotnet restore --prject WorldCup2026.API.csproj
         dotnet ef database update
         dotnet run
 
