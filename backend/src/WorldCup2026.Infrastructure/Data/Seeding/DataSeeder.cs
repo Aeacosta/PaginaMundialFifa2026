@@ -32,6 +32,8 @@ public class DataSeeder
             await SeedGroupsAsync(scope, cancellationToken);
             await SeedStadiumsAsync(scope, cancellationToken);
             await SeedTeamsAsync(scope, cancellationToken);
+            await SeedStandingsAsync(scope, cancellationToken);
+            await SeedMatchesAsync(scope, cancellationToken);
 
             _logger.LogInformation("Database seeding completed successfully");
         }
@@ -64,6 +66,22 @@ public class DataSeeder
         var seeder = scope.ServiceProvider.GetRequiredService<TeamSeeder>();
         await seeder.SeedAsync(cancellationToken);
         _logger.LogInformation("Teams seeded successfully");
+    }
+
+    private async Task SeedStandingsAsync(IServiceScope scope, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Seeding standings...");
+        var seeder = scope.ServiceProvider.GetRequiredService<StandingSeeder>();
+        await seeder.SeedAsync(cancellationToken);
+        _logger.LogInformation("Standings seeded successfully");
+    }
+
+    private async Task SeedMatchesAsync(IServiceScope scope, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Seeding matches...");
+        var seeder = scope.ServiceProvider.GetRequiredService<MatchSeeder>();
+        await seeder.SeedAsync(cancellationToken);
+        _logger.LogInformation("Matches seeded successfully");
     }
 }
 

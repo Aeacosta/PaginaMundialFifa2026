@@ -6,7 +6,7 @@ export const standingsService = {
    * Get all standings
    */
   getAll: async (): Promise<StandingDto[]> => {
-    const response = await api.get<StandingDto[]>('/standings');
+    const response = await api.get<StandingDto[]>('/standings/all');
     return response.data;
   },
 

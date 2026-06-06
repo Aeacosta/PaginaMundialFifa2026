@@ -50,6 +50,8 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<GroupSeeder>();
 builder.Services.AddScoped<StadiumSeeder>();
 builder.Services.AddScoped<TeamSeeder>();
+builder.Services.AddScoped<StandingSeeder>();
+builder.Services.AddScoped<MatchSeeder>();
 builder.Services.AddScoped<DataSeeder>();
 
 // Configure CORS

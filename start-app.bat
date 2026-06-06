@@ -1,5 +1,4 @@
-cd backend
+cd backend/src/WorldCup2026.API
 dotnet restore
 dotnet ef database update
-dotnet run --project src/WorldCup2026.API
-
+dotnet run

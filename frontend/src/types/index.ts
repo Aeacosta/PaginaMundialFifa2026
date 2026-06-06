@@ -90,17 +90,23 @@ export interface MatchDto {
   homeTeamId: number;
   homeTeamName: string;
   homeTeamCode: string;
+  homeTeamFlagUrl?: string;
   awayTeamId: number;
   awayTeamName: string;
   awayTeamCode: string;
+  awayTeamFlagUrl?: string;
   stadiumId: number;
   stadiumName: string;
+  stadiumCity: string;
+  stadiumCountry: string;
   matchDate: string;
   phase: MatchPhase;
+  phaseName: string;
   round?: number;
   groupId?: number;
   groupName?: string;
   status: MatchStatus;
+  statusName: string;
   result?: MatchResultDto;
 }
 
@@ -162,7 +168,9 @@ export interface StandingDto {
 }
 
 export interface GroupWithStandingsDto {
-  group: GroupDto;
+  id: number;
+  name: string;
+  description?: string;
   standings: StandingDto[];
 }
 

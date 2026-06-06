@@ -8,9 +8,9 @@ This is a full-stack web application built to track the 2026 FIFA World Cup, fea
 
 ## 🏗️ Architecture
 
-- **Backend:** .NET 8 Web API with Clean Architecture
+- **Backend:** .NET 10.0 Web API with Clean Architecture
 - **Frontend:** React 18 with TypeScript and Material-UI
-- **Database:** PostgreSQL
+- **Database:** SQLite (Development) / PostgreSQL (Production)
 - **Containerization:** Docker & Docker Compose
 
 ## 📚 Documentation
@@ -47,38 +47,277 @@ Comprehensive planning documentation is available in the [`.workbench/`](.workbe
 ## 🚀 Quick Start
 
 ### Prerequisites
-- .NET 8 SDK
-- Node.js 18+
-- PostgreSQL 15+
-- Docker Desktop (optional)
+- **.NET 10.0 SDK** - [Download here](https://dotnet.microsoft.com/download/dotnet/10.0)
+- **Node.js 18+** - [Download here](https://nodejs.org/)
+- **Git** - [Download here](https://git-scm.com/)
 
-### Installation
+### Step-by-Step Setup
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd WorldCup2026
+#### 1️⃣ Clone the Repository
+```bash
+git clone <repository-url>
+cd WorldCup2026
+```
+
+#### 2️⃣ Backend Setup
+
+**Navigate to API directory:**
+```bash
+cd backend/src/WorldCup2026.API
+```
+
+**Restore dependencies:**
+```bash
+dotnet restore
+```
+
+**Create database schema:**
+```bash
+dotnet ef database update
+```
+This creates `WorldCup2026.db` (SQLite) with all tables.
+
+**Start the backend API:**
+```bash
+dotnet run
+```
+✅ Backend running at: **http://localhost:5004**
+✅ Swagger UI at: **http://localhost:5004/swagger**
+
+#### 3️⃣ Seed the Database
+
+**Open a NEW terminal** (keep backend running) and run:
+
+**Option A - Using PowerShell:**
+```powershell
+Invoke-RestMethod -Uri "http://localhost:5004/api/seed" -Method Post
+```
+
+**Option B - Using the batch file:**
+```cmd
+.\seed-database.bat
+```
+
+**Option C - Using Swagger UI:**
+1. Open http://localhost:5004/swagger
+2. Find `POST /api/seed` endpoint
+3. Click "Try it out" → "Execute"
+
+**What gets seeded:**
+- ✅ 12 Groups (A-L)
+- ✅ 16 Stadiums (USA, Mexico, Canada)
+- ✅ 48 Teams (FIFA World Cup 2026 qualified teams)
+- ✅ 48 Standings (initial records with zeros)
+
+#### 4️⃣ Frontend Setup
+
+**Open a NEW terminal** and navigate to frontend:
+```bash
+cd frontend
+```
+
+**Install dependencies:**
+```bash
+npm install
+```
+
+**Start the development server:**
+```bash
+npm run dev
+```
+✅ Frontend running at: **http://localhost:5173**
+
+#### 5️⃣ Access the Application
+
+Open your browser and navigate to:
+- **Frontend:** http://localhost:5173
+- **Backend API:** http://localhost:5004
+- **Swagger UI:** http://localhost:5004/swagger
+
+### 🎉 You're Ready!
+
+The application should now display:
+- Dashboard with statistics
+- Teams list (48 teams)
+- Groups list (12 groups)
+- Stadiums list (16 stadiums)
+- Standings table
+
+---
+
+## 🔧 Troubleshooting
+
+### Backend Issues
+
+**Problem:** `dotnet ef` command not found
+```bash
+# Install EF Core tools globally
+dotnet tool install --global dotnet-ef
+```
+
+**Problem:** Database tables don't exist
+```bash
+# Re-run migrations
+cd backend/src/WorldCup2026.API
+dotnet ef database update
+```
+
+**Problem:** Port 5004 already in use
+```bash
+# Change port in launchSettings.json or kill the process
+```
+
+### Frontend Issues
+
+**Problem:** `npm install` fails
+```bash
+# Clear cache and retry
+npm cache clean --force
+npm install
+```
+
+**Problem:** Port 5173 already in use
+```bash
+# Vite will automatically use next available port
+# Or specify port: npm run dev -- --port 3000
+```
+
+### Database Issues
+
+**Problem:** No data displaying in frontend
+```bash
+# 1. Verify backend is running (http://localhost:5004)
+# 2. Seed the database using one of the methods above
+# 3. Check browser console for errors (F12)
+# 4. Verify API endpoints in Swagger
+```
+
+**Problem:** Need to reset database
+```bash
+# Delete database file and re-create
+cd backend/src/WorldCup2026.API
+Remove-Item WorldCup2026.db
+dotnet ef database update
+# Then seed again
+```
+
+---
+
+## 🎮 Simulating Match Results
+
+After seeding the database, you can simulate actual matches by updating match results through the API. This will automatically update the standings.
+
+### Method 1: Using PowerShell
+
+```powershell
+# Update a match result (Match ID 1: Team 1 vs Team 2)
+$body = @{
+    homeTeamScore = 2
+    awayTeamScore = 1
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://localhost:5004/api/matches/1/result" `
+    -Method PUT `
+    -Body $body `
+    -ContentType "application/json"
+```
+
+### Method 2: Using Swagger UI
+
+1. Open **http://localhost:5004/swagger**
+2. Find `PUT /api/matches/{id}/result` endpoint
+3. Click **"Try it out"**
+4. Enter:
+   - **id:** Match ID (e.g., `1`)
+   - **Request body:**
+     ```json
+     {
+       "homeTeamScore": 2,
+       "awayTeamScore": 1
+     }
+     ```
+5. Click **"Execute"**
+
+### Method 3: Using cURL
+
+```bash
+curl -X PUT "http://localhost:5004/api/matches/1/result" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "homeTeamScore": 2,
+    "awayTeamScore": 1
+  }'
+```
+
+### Method 4: Using Postman
+
+1. Create a new **PUT** request
+2. URL: `http://localhost:5004/api/matches/1/result`
+3. Headers: `Content-Type: application/json`
+4. Body (raw JSON):
+   ```json
+   {
+     "homeTeamScore": 2,
+     "awayTeamScore": 1
+   }
    ```
+5. Click **Send**
 
-2. **Backend Setup**
-   ```bash
-   cd backend
-   dotnet restore
-   dotnet ef database update
-   dotnet run --project src/WorldCup2026.API
-   ```
+### Example: Simulating Multiple Matches
 
-3. **Frontend Setup**
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
+```powershell
+# Match 1: USA 3-1 Mexico
+Invoke-RestMethod -Uri "http://localhost:5004/api/matches/1/result" `
+    -Method PUT `
+    -Body '{"homeTeamScore":3,"awayTeamScore":1}' `
+    -ContentType "application/json"
 
-4. **Docker Setup** (Alternative)
-   ```bash
-   docker-compose up -d
-   ```
+# Match 2: Canada 2-2 Costa Rica
+Invoke-RestMethod -Uri "http://localhost:5004/api/matches/2/result" `
+    -Method PUT `
+    -Body '{"homeTeamScore":2,"awayTeamScore":2}' `
+    -ContentType "application/json"
+
+# Match 3: Brazil 4-0 Argentina
+Invoke-RestMethod -Uri "http://localhost:5004/api/matches/3/result" `
+    -Method PUT `
+    -Body '{"homeTeamScore":4,"awayTeamScore":0}' `
+    -ContentType "application/json"
+```
+
+### For Knockout Matches (with penalties)
+
+```json
+{
+  "homeTeamScore": 1,
+  "awayTeamScore": 1,
+  "homeTeamPenalties": 4,
+  "awayTeamPenalties": 3
+}
+```
+
+### What Happens After Updating Results:
+
+1. ✅ Match status changes to "Completed"
+2. ✅ Standings are automatically recalculated
+3. ✅ Points are awarded (Win: 3, Draw: 1, Loss: 0)
+4. ✅ Goal difference is updated
+5. ✅ Teams are re-ranked in their groups
+6. ✅ Frontend displays updated standings immediately
+
+### Verify Results:
+
+- **View Match:** http://localhost:5004/api/matches/1
+- **View Standings:** http://localhost:5004/api/standings/all
+- **View Group Standings:** http://localhost:5004/api/standings/group/1
+- **Frontend Standings:** http://localhost:5173/standings
+- **Frontend Matches:** http://localhost:5173/matches
+
+---
+
+## 🐳 Docker Setup (Alternative)
+
+**Coming soon** - Docker Compose configuration for easy deployment
 
 ## 📊 Tournament Structure
 
@@ -92,30 +331,29 @@ Comprehensive planning documentation is available in the [`.workbench/`](.workbe
 ## 🛠️ Technology Stack
 
 ### Backend
-- **.NET 8** - Modern, high-performance framework
+- **.NET 10.0** - Modern, high-performance framework
 - **ASP.NET Core Web API** - RESTful API
-- **Entity Framework Core** - ORM for database access
-- **PostgreSQL** - Relational database
-- **FluentValidation** - Input validation
-- **AutoMapper** - Object mapping
-- **Serilog** - Structured logging
+- **Entity Framework Core 9.0** - ORM for database access
+- **SQLite** - Lightweight database (development)
+- **FluentValidation 12.1.1** - Input validation
+- **AutoMapper 12.0.1** - Object mapping
 - **Swagger/OpenAPI** - API documentation
 
 ### Frontend
 - **React 18** - UI library
-- **TypeScript** - Type-safe JavaScript
-- **Vite** - Fast build tool
-- **Material-UI (MUI)** - Component library
+- **TypeScript 5.6** - Type-safe JavaScript
+- **Vite 6.0** - Fast build tool
+- **Material-UI v5** - Component library
 - **React Router v6** - Client-side routing
-- **React Query** - Data fetching and caching
+- **React Query (TanStack Query)** - Data fetching and caching
 - **Axios** - HTTP client
-- **Formik + Yup** - Form handling and validation
 
-### DevOps
-- **Docker** - Containerization
-- **Docker Compose** - Multi-container orchestration
-- **xUnit** - Backend testing
-- **Vitest** - Frontend testing
+### Testing
+- **MSTest** - Backend unit testing
+- **Moq 4.20.72** - Mocking framework
+- **FluentAssertions 8.10.0** - Assertion library
+- **Vitest** - Frontend testing (planned)
+- **React Testing Library** - Component testing (planned)
 
 ## 📁 Project Structure
 
@@ -155,23 +393,40 @@ cd frontend
 npm test
 ```
 
-## 🐳 Docker Deployment
+## 📊 Current Implementation Status
 
-Build and run all services:
-```bash
-docker-compose up -d
-```
+### ✅ Completed (63% - 57/90 hours)
+- ✅ **Backend API** - 100% complete
+  - 6 controllers with 60 endpoints
+  - Clean Architecture implementation
+  - Repository and Service patterns
+  - FluentValidation for all DTOs
+  - Swagger documentation
+  
+- ✅ **Frontend** - 100% complete
+  - 11 pages (Dashboard, Teams, Groups, Matches, Stadiums, Standings)
+  - Responsive design with Material-UI
+  - React Query for data fetching
+  - TypeScript type safety
+  - Search and filter functionality
+  
+- ✅ **Database** - 100% complete
+  - EF Core migrations
+  - 6 entity types with relationships
+  - Seeding with real FIFA World Cup 2026 data
 
-Access the application:
-- **Frontend:** http://localhost:3000
-- **Backend API:** http://localhost:5000
-- **Swagger UI:** http://localhost:5000/swagger
+### ⏳ Pending (37% - 33 hours)
+- ⏳ Backend unit tests (12 hours)
+- ⏳ Frontend unit tests (8 hours)
+- ⏳ Docker & Deployment (6 hours)
+- ⏳ Documentation (4 hours)
+- ⏳ Final polish (3 hours)
 
 ## 📖 API Documentation
 
 Once the backend is running, access the interactive API documentation:
-- **Swagger UI:** http://localhost:5000/swagger
-- **OpenAPI Spec:** http://localhost:5000/swagger/v1/swagger.json
+- **Swagger UI:** http://localhost:5004/swagger
+- **OpenAPI Spec:** http://localhost:5004/swagger/v1/swagger.json
 
 ## 🎓 Learning Outcomes
 
@@ -200,8 +455,10 @@ This project demonstrates:
 ## 📝 Development Status
 
 - ✅ **Planning Phase:** Complete
-- ⏳ **Implementation Phase:** Ready to start
-- ⏳ **Testing Phase:** Pending
+- ✅ **Backend Implementation:** Complete (100%)
+- ✅ **Frontend Implementation:** Complete (100%)
+- ✅ **Database Setup:** Complete (100%)
+- ⏳ **Testing Phase:** In Progress (5%)
 - ⏳ **Deployment Phase:** Pending
 
 ## 🤝 Contributing
@@ -230,6 +487,17 @@ For questions or feedback, please open an issue in the repository.
 
 ---
 
+## 📞 Support
+
+For issues or questions:
+1. Check the [Progress Report](.workbench/08-progress-report.md)
+2. Review [API Documentation](.workbench/05-api-endpoints.md)
+3. Open an issue in the repository
+
+---
+
 **Built with ❤️ for the love of football and software development** ⚽🏆
 
 **Ready to track the World Cup 2026!** 🎉
+
+**Last Updated:** June 6, 2026
