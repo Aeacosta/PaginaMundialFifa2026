@@ -14,13 +14,13 @@ Phase 1 established the foundational structure of the FIFA World Cup 2026 tracki
 
 #### 1. WorldCup2026.Domain
 **Location:** `backend/src/WorldCup2026.Domain/`
-**Type:** Class Library (.NET 10.0)
+**Type:** Class Library (.NET 9.0)
 **Purpose:** Domain entities, enums, and repository interfaces
 **Dependencies:** None (pure domain layer)
 
 #### 2. WorldCup2026.Infrastructure
 **Location:** `backend/src/WorldCup2026.Infrastructure/`
-**Type:** Class Library (.NET 10.0)
+**Type:** Class Library (.NET 9.0)
 **Purpose:** Data access, EF Core implementation, repositories
 **Dependencies:**
 - WorldCup2026.Domain
@@ -30,7 +30,7 @@ Phase 1 established the foundational structure of the FIFA World Cup 2026 tracki
 
 #### 3. WorldCup2026.Application
 **Location:** `backend/src/WorldCup2026.Application/`
-**Type:** Class Library (.NET 10.0)
+**Type:** Class Library (.NET 9.0)
 **Purpose:** Business logic, services, DTOs, validators
 **Dependencies:**
 - WorldCup2026.Domain
@@ -38,7 +38,7 @@ Phase 1 established the foundational structure of the FIFA World Cup 2026 tracki
 
 #### 4. WorldCup2026.API
 **Location:** `backend/src/WorldCup2026.API/`
-**Type:** ASP.NET Core Web API (.NET 10.0)
+**Type:** ASP.NET Core Web API (.NET 9.0)
 **Purpose:** REST API endpoints, controllers
 **Dependencies:**
 - WorldCup2026.Application

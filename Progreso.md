@@ -2,7 +2,7 @@
 
 ## Estado General del Proyecto
 
-Me complace informar que el desarrollo de la aplicación de seguimiento del Mundial FIFA 2026 ha alcanzado un **77% de completitud** (69.5 de 90 horas estimadas). El proyecto está construido con tecnologías modernas: backend en .NET 10.0 con arquitectura limpia y frontend en React 18 con TypeScript y Material-UI.
+Me complace informar que el desarrollo de la aplicación de seguimiento del Mundial FIFA 2026 ha alcanzado un **77% de completitud** (69.5 de 90 horas estimadas). El proyecto está construido con tecnologías modernas: backend en .NET 9.0 con arquitectura limpia y frontend en React 18 con TypeScript y Material-UI.
 
 ## Componentes Completados (100%)
 

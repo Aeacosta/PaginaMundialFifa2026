@@ -8,7 +8,7 @@ This is a full-stack web application built to track the 2026 FIFA World Cup, fea
 
 ## 🏗️ Architecture
 
-- **Backend:** .NET 10.0 Web API with Clean Architecture
+- **Backend:** .NET 9.0 Web API with Clean Architecture
 - **Frontend:** React 18 with TypeScript and Material-UI
 - **Database:** SQLite (Development) / PostgreSQL (Production)
 - **Containerization:** Docker & Docker Compose
@@ -24,6 +24,7 @@ Comprehensive planning documentation is available in the [`.workbench/`](.workbe
 - **[API Endpoints](.workbench/05-api-endpoints.md)** - Complete REST API specification
 - **[Implementation Plan](.workbench/06-implementation-plan.md)** - Step-by-step development roadmap
 - **[Business Rules](.workbench/07-business-rules.md)** - Validation and business logic rules
+- **[CI/CD Testing Report](.workbench/10-cicd-testing-report.md)** - Automated testing and coverage pipeline
 
 ## ✨ Key Features
 
@@ -47,7 +48,7 @@ Comprehensive planning documentation is available in the [`.workbench/`](.workbe
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **.NET 10.0 SDK** - [Download here](https://dotnet.microsoft.com/download/dotnet/10.0)
+- **.NET 9.0 SDK** - [Download here](https://dotnet.microsoft.com/download/dotnet/9.0)
 - **Node.js 18+** - [Download here](https://nodejs.org/)
 - **Git** - [Download here](https://git-scm.com/)
 
@@ -315,9 +316,70 @@ Invoke-RestMethod -Uri "http://localhost:5004/api/matches/3/result" `
 
 ---
 
-## 🐳 Docker Setup (Alternative)
+## 🐳 Docker Deployment
 
-**Coming soon** - Docker Compose configuration for easy deployment
+### Quick Start with Docker
+
+The easiest way to run the application is using Docker Compose:
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd WorldCup2026
+
+# Build and start all services
+docker-compose up -d --build
+
+# Access the application
+# Frontend: http://localhost
+# Backend API: http://localhost:5004
+# Swagger: http://localhost:5004/swagger
+```
+
+### Seed the Database
+
+After starting with Docker, seed the database:
+
+```bash
+# Using PowerShell
+Invoke-RestMethod -Uri "http://localhost:5004/api/seed" -Method Post
+
+# Using curl
+curl -X POST http://localhost:5004/api/seed
+```
+
+### Docker Commands
+
+```bash
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+
+# Restart services
+docker-compose restart
+
+# View running containers
+docker-compose ps
+```
+
+### What's Included
+
+- **Backend Container**: .NET 9.0 API with SQLite database
+- **Frontend Container**: React app served by Nginx
+- **Persistent Storage**: Database persisted in Docker volume
+- **Health Checks**: Automatic health monitoring
+- **Optimized Images**: Multi-stage builds for minimal size
+
+### Detailed Documentation
+
+For comprehensive Docker documentation, see **[DOCKER.md](DOCKER.md)**:
+- Complete setup instructions
+- Configuration options
+- Troubleshooting guide
+- Production deployment
+- Performance optimization
 
 ## 📊 Tournament Structure
 
@@ -331,7 +393,7 @@ Invoke-RestMethod -Uri "http://localhost:5004/api/matches/3/result" `
 ## 🛠️ Technology Stack
 
 ### Backend
-- **.NET 10.0** - Modern, high-performance framework
+- **.NET 9.0** - Modern, high-performance framework
 - **ASP.NET Core Web API** - RESTful API
 - **Entity Framework Core 9.0** - ORM for database access
 - **SQLite** - Lightweight database (development)
@@ -455,6 +517,55 @@ Frontend testing with Vitest and React Testing Library is planned for future imp
 cd frontend
 npm test  # Coming soon
 ```
+
+## 🔄 CI/CD Pipeline
+
+### Automated Testing with GitHub Actions
+
+The project includes a comprehensive CI/CD pipeline that automatically runs unit tests with code coverage on every pull request.
+
+**Workflow**: `.github/workflows/RunUnitTests.yml`
+
+#### Pipeline Features
+
+- ✅ **Automated Test Execution** - Runs all 178 unit tests on every PR
+- ✅ **Code Coverage Reports** - Generates detailed coverage metrics using XPlat Code Coverage
+- ✅ **PR Comments** - Automatically posts coverage results as PR comments
+- ✅ **Coverage Badges** - Visual indicators (🟢/🟡/🔴) based on coverage thresholds
+- ✅ **Artifact Storage** - Stores coverage reports for 30 days
+- ✅ **Job Summaries** - Displays test results in GitHub Actions summary
+
+#### Coverage Thresholds
+
+- 🟢 **Above 80%**: Good coverage
+- 🟡 **60-80%**: Acceptable coverage
+- 🔴 **Below 60%**: Poor coverage
+
+#### Trigger Events
+
+- **Pull Requests**: Automatically runs on all PRs to any branch
+- **Manual Dispatch**: Can be triggered manually via GitHub Actions UI
+
+#### Pipeline Steps
+
+1. **Checkout Code** - Retrieves latest code
+2. **Setup .NET 9 SDK** - Installs required SDK
+3. **Restore Dependencies** - Downloads NuGet packages
+4. **Build Solution** - Compiles in Release configuration
+5. **Run Tests with Coverage** - Executes all tests and collects coverage
+6. **Generate Coverage Report** - Creates markdown coverage summary
+7. **Add to Job Summary** - Displays in GitHub Actions
+8. **Post PR Comment** - Updates pull request with results
+9. **Upload Artifacts** - Stores coverage reports
+
+#### Viewing Results
+
+- **GitHub Actions**: Check the "Actions" tab in the repository
+- **Pull Requests**: Coverage report appears as a comment
+- **Job Summary**: Detailed results in the workflow run summary
+- **Artifacts**: Download coverage reports from workflow artifacts
+
+For detailed information, see the **[CI/CD Testing Report](.workbench/10-cicd-testing-report.md)**.
 
 ## 📊 Current Implementation Status
 

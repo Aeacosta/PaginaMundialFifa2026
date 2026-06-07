@@ -72,6 +72,40 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Initialize database and seed data
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<WorldCupDbContext>();
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        
+        logger.LogInformation("Applying database migrations...");
+        context.Database.Migrate();
+        logger.LogInformation("Database migrations applied successfully");
+        
+        // Check if database is empty and seed if needed
+        if (!context.Teams.Any())
+        {
+            logger.LogInformation("Database is empty. Starting seeding process...");
+            var seeder = services.GetRequiredService<DataSeeder>();
+            await seeder.SeedAllAsync();
+            logger.LogInformation("Database seeded successfully");
+        }
+        else
+        {
+            logger.LogInformation("Database already contains data. Skipping seeding.");
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while initializing the database");
+        throw;
+    }
+}
+
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
@@ -90,6 +124,11 @@ app.UseCors("AllowAll");
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Health check endpoint
+app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }))
+    .WithName("HealthCheck")
+    .WithOpenApi();
 
 // Add seeding endpoint for development
 if (app.Environment.IsDevelopment())

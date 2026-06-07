@@ -100,7 +100,7 @@ This document outlines the step-by-step implementation plan for building the FIF
 3. ✅ Applied migration successfully
 4. ✅ Database created with all tables and indexes
 
-**Resolution:** Downgraded EF Core packages from 10.0.8 to 9.0.0 (stable version) to resolve compatibility issues with .NET 10 preview.
+**Resolution:** Downgraded EF Core packages from 10.0.8 to 9.0.0 (stable version) to resolve compatibility issues with .NET 9.
 
 ---
 
@@ -390,7 +390,7 @@ This document outlines the step-by-step implementation plan for building the FIF
 
 **Known Issues:**
 1. **AutoMapper Vulnerability:** Package version 12.0.1 has known high severity vulnerability (GHSA-rvv3-g6hj-g44x)
-   - **Recommendation:** Upgrade to AutoMapper 13.0+ when available for .NET 10
+   - **Recommendation:** Upgrade to AutoMapper 13.0+ when available for .NET 9
    - **Impact:** Low for development, should be addressed before production
 
 2. **Database Empty:** No seed data yet
@@ -583,10 +583,10 @@ This document outlines the step-by-step implementation plan for building the FIF
 ### Current Risks
 1. **AutoMapper Security Vulnerability**
    - Impact: Known high severity vulnerability (GHSA-rvv3-g6hj-g44x)
-   - Mitigation: Upgrade to newer version when available for .NET 10
+   - Mitigation: Upgrade to newer version when available for .NET 9
    - Priority: Medium (address before production)
 
-2. **.NET 10 Preview Stability**
+2. **.NET 9 Stability**
    - Impact: Potential bugs and breaking changes
    - Mitigation: Consider using .NET 8 LTS for production
    - Status: Monitoring

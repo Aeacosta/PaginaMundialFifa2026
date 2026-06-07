@@ -1,4 +1,4 @@
-name: .NET 10 Unit Tests
+name: .NET 9 Unit Tests
 
 on:
   pull_request:
@@ -20,7 +20,7 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '10.0.x'
+        dotnet-version: '9.0.x'
 
     - name: Restore Dependencies
       run: dotnet restore backend/WorldCup2026.slnx
