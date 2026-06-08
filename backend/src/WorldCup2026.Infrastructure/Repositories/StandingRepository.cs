@@ -14,6 +14,14 @@ public class StandingRepository : Repository<Standing>, IStandingRepository
     {
     }
 
+    public override async Task<IEnumerable<Standing>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(s => s.Team)
+            .Include(s => s.Group)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<Standing?> GetByTeamIdAsync(int teamId, CancellationToken cancellationToken = default)
     {
         return await _dbSet
@@ -65,7 +73,9 @@ public class StandingRepository : Repository<Standing>, IStandingRepository
         // Get all matches for the group that are finished
         var matches = await _context.Matches
             .Include(m => m.Result)
-            .Where(m => m.GroupId == groupId && m.Result != null)
+            .Where(m => m.GroupId == groupId
+                && m.Status == Domain.Enums.MatchStatus.Finished
+                && m.Result != null)
             .ToListAsync(cancellationToken);
 
         // Get all standings for the group

@@ -61,6 +61,7 @@ export interface StadiumDto {
   country: string;
   capacity: number;
   imageUrl?: string;
+  flagUrl?: string;
   latitude?: number;
   longitude?: number;
 }
@@ -71,6 +72,7 @@ export interface CreateStadiumDto {
   country: string;
   capacity: number;
   imageUrl?: string;
+  flagUrl?: string;
   latitude?: number;
   longitude?: number;
 }
@@ -81,6 +83,7 @@ export interface UpdateStadiumDto {
   country: string;
   capacity: number;
   imageUrl?: string;
+  flagUrl?: string;
   latitude?: number;
   longitude?: number;
 }
@@ -154,6 +157,7 @@ export interface StandingDto {
   teamId: number;
   teamName: string;
   teamCode: string;
+  teamFlagUrl?: string;
   groupId: number;
   groupName: string;
   played: number;

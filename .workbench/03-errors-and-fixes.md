@@ -82,4 +82,109 @@ All issues have been resolved:
 
 ---
 
+## Date: 2026-06-08
+
+### Issue #4: Standings Not Updating When Matches Completed
+**Error:** Standings data (points, ranks, positions) not updating when matches with results were seeded from JSON
+**Root Cause:** Multiple issues:
+1. `StandingRepository.UpdateGroupStandingsAsync()` only checked `m.Result != null` without verifying `MatchStatus.Finished`
+2. JSON seeder didn't map "Completed" status to "Finished" enum value
+3. JSON seeder didn't calculate winner when creating match results
+4. JSON seeder didn't recalculate standings after seeding matches with results
+
+**Solution:**
+1. **StandingRepository.cs (Line 66-69):**
+   - Updated query to explicitly check for `MatchStatus.Finished` status
+   - Ensures only properly completed matches are included in calculations
+
+2. **JsonMatchSeeder.cs (Line 195-199):**
+   - Added backward compatibility to map "Completed" to "Finished"
+   - Supports both status values in JSON files
+
+3. **JsonMatchSeeder.cs (Line 217-238):**
+   - Added winner determination logic in `CreateMatchResult()`
+   - Calculates winner from regular time scores and penalties
+   - Sets `WinnerTeamId` field properly
+
+4. **JsonMatchSeeder.cs (Line 120-133 & 240-318):**
+   - Added automatic standings recalculation after seeding
+   - Only recalculates groups with completed matches
+   - Implements same logic as `StandingRepository.UpdateGroupStandingsAsync()`
+
+5. **matches.json:**
+   - Changed status from "Completed" to "Finished" for consistency
+
+**Files Modified:**
+- `backend/src/WorldCup2026.Infrastructure/Repositories/StandingRepository.cs`
+- `backend/src/WorldCup2026.Infrastructure/Data/Seeding/JsonMatchSeeder.cs`
+- `backend/src/WorldCup2026.Infrastructure/Data/Seeding/SeedData/matches.json`
+
+---
+
+### Issue #5: Standings Page Not Displaying Team Information
+**Error:** Standings page showed points/stats but team names, codes, and flags were missing
+**Root Cause:**
+1. `StandingRepository.GetAllAsync()` didn't include Team and Group navigation properties
+2. `MappingProfile` didn't map `TeamFlagUrl` from `Team.FlagUrl`
+
+**Solution:**
+1. **StandingRepository.cs (Line 17-22):**
+   - Overrode `GetAllAsync()` to include `.Include(s => s.Team)` and `.Include(s => s.Group)`
+   - Ensures all standings queries load necessary related data
+
+2. **MappingProfile.cs (Line 126):**
+   - Added mapping for `TeamFlagUrl` from `Team.FlagUrl`
+   - Team flags now display properly in standings table
+
+**Files Modified:**
+- `backend/src/WorldCup2026.Infrastructure/Repositories/StandingRepository.cs`
+- `backend/src/WorldCup2026.Application/Mappings/MappingProfile.cs`
+
+---
+
+### Issue #6: Missing Match Status Update Endpoint
+**Error:** No API endpoint to manually update match status
+**Solution:**
+- Added `UpdateMatchStatus` endpoint in `MatchesController.cs` (Line 223-245)
+- Allows manual status updates via `PUT /api/matches/{id}/status`
+
+**Files Modified:**
+- `backend/src/WorldCup2026.API/Controllers/MatchesController.cs`
+
+---
+
+## Helper Scripts Created
+
+### fix-standings.ps1
+PowerShell script to manually recalculate all standings and display results
+**Usage:**
+```powershell
+.\fix-standings.ps1
+```
+
+---
+
+## Summary
+
+All issues have been resolved:
+- ✅ Matches page displays all tournament matches
+- ✅ Standings page displays all groups with initial standings
+- ✅ **Standings automatically update when matches are completed**
+- ✅ **Standings recalculate during database seeding for matches with results**
+- ✅ **Team names, codes, and flags display properly in standings**
+- ✅ **Points, ranks, and positions update correctly**
+- ✅ No TypeErrors on matches page
+- ✅ Frontend types match backend DTOs
+- ✅ Match status update endpoint available
+
+## Notes
+
+- Standings automatically recalculate when match results are updated via API
+- JSON seeder supports both "Completed" and "Finished" status values
+- Database seeding now includes automatic standings calculation for completed matches
+- Navigation properties are properly loaded for all standings queries
+- Manual recalculation available via `POST /api/standings/recalculate-all`
+
+---
+
 *Made with Bob*

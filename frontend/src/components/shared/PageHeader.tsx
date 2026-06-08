@@ -8,7 +8,7 @@ interface BreadcrumbItem {
 }
 
 interface PageHeaderProps {
-  title: string;
+  title: string | React.ReactNode;
   subtitle?: string;
   breadcrumbs?: BreadcrumbItem[];
   action?: React.ReactNode;

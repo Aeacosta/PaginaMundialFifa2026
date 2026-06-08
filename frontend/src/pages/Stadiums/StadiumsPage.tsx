@@ -165,6 +165,20 @@ const StadiumsPage = () => {
                   <Typography variant="body2" color="text.secondary">
                     {stadium.city}, {stadium.country}
                   </Typography>
+                  {stadium.flagUrl && (
+                    <Box
+                      component="img"
+                      src={stadium.flagUrl}
+                      alt={`${stadium.country} flag`}
+                      sx={{
+                        width: 24,
+                        height: 16,
+                        objectFit: 'cover',
+                        borderRadius: 0.5,
+                        ml: 0.5,
+                      }}
+                    />
+                  )}
                 </Box>
                 <Box sx={{ display: 'flex', gap: 1, mt: 2, flexWrap: 'wrap' }}>
                   <Chip

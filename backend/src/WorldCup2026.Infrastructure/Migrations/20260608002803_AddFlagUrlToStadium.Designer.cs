@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WorldCup2026.Infrastructure.Data;
 
@@ -10,9 +11,11 @@ using WorldCup2026.Infrastructure.Data;
 namespace WorldCup2026.Infrastructure.Migrations
 {
     [DbContext(typeof(WorldCupDbContext))]
-    partial class WorldCupDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260608002803_AddFlagUrlToStadium")]
+    partial class AddFlagUrlToStadium
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");

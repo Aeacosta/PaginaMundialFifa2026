@@ -222,6 +222,31 @@ public class MatchesController : ControllerBase
     }
 
     /// <summary>
+    /// Update match status
+    /// </summary>
+    [HttpPut("{id}/status")]
+    [ProducesResponseType(typeof(MatchDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<MatchDto>> UpdateMatchStatus(
+        int id,
+        [FromBody] MatchStatus status,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.LogInformation("Updating status for match ID: {MatchId} to {Status}", id, status);
+
+        var match = await _matchService.UpdateMatchStatusAsync(id, status, cancellationToken);
+
+        if (match == null)
+        {
+            _logger.LogWarning("Match with ID {MatchId} not found for status update", id);
+            return NotFound(new { message = $"Match with ID {id} not found" });
+        }
+
+        return Ok(match);
+    }
+
+    /// <summary>
     /// Delete a match
     /// </summary>
     [HttpDelete("{id}")]

@@ -124,6 +124,7 @@ public class MappingProfile : Profile
         CreateMap<Standing, StandingDto>()
             .ForMember(dest => dest.TeamName, opt => opt.MapFrom(src => src.Team.Name))
             .ForMember(dest => dest.TeamCode, opt => opt.MapFrom(src => src.Team.Code))
+            .ForMember(dest => dest.TeamFlagUrl, opt => opt.MapFrom(src => src.Team.FlagUrl))
             .ForMember(dest => dest.GroupName, opt => opt.MapFrom(src => src.Group.Name));
     }
 

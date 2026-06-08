@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Typography, Chip } from '@mui/material';
+import { Box, Card, CardContent, Typography, Chip, Avatar } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { groupsService } from '../../services/api';
@@ -43,8 +43,7 @@ const GroupsPage = () => {
             gridTemplateColumns: {
               xs: '1fr',
               sm: 'repeat(2, 1fr)',
-              md: 'repeat(3, 1fr)',
-              lg: 'repeat(4, 1fr)',
+              lg: 'repeat(3, 1fr)',
             },
             gap: 3,
           }}
@@ -101,15 +100,29 @@ const GroupsPage = () => {
                             bgcolor: index < 2 ? 'success.light' : 'background.default',
                           }}
                         >
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1, minWidth: 0 }}>
                             <Chip
                               label={standing.position}
                               size="small"
                               color={index < 2 ? 'success' : 'default'}
-                              sx={{ minWidth: 32 }}
+                              sx={{ minWidth: 32, flexShrink: 0 }}
                             />
-                            <Box>
-                              <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                            <Avatar
+                              src={standing.teamFlagUrl}
+                              alt={standing.teamName}
+                              sx={{
+                                width: 24,
+                                height: 24,
+                                border: '1px solid',
+                                borderColor: 'divider',
+                                flexShrink: 0
+                              }}
+                              variant="rounded"
+                            >
+                              {standing.teamCode?.substring(0, 2) || '??'}
+                            </Avatar>
+                            <Box sx={{ minWidth: 0, flex: 1 }}>
+                              <Typography variant="body2" sx={{ fontWeight: 'medium', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                 {standing.teamName}
                               </Typography>
                               <Typography variant="caption" color="text.secondary">
@@ -117,11 +130,11 @@ const GroupsPage = () => {
                               </Typography>
                             </Box>
                           </Box>
-                          <Box sx={{ textAlign: 'right' }}>
-                            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                          <Box sx={{ textAlign: 'right', flexShrink: 0, minWidth: 80 }}>
+                            <Typography variant="body2" sx={{ fontWeight: 'bold', whiteSpace: 'nowrap' }}>
                               {standing.points} pts
                             </Typography>
-                            <Typography variant="caption" color="text.secondary">
+                            <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: 'nowrap' }}>
                               {standing.played}P {standing.won}W {standing.drawn}D {standing.lost}L
                             </Typography>
                           </Box>

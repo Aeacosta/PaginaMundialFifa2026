@@ -9,6 +9,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Avatar,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -184,9 +185,24 @@ const MatchesPage = () => {
                           mb: 0.5,
                         }}
                       >
-                        <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
-                          {match.homeTeamName || 'TBD'}
-                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                          <Avatar
+                            src={match.homeTeamFlagUrl}
+                            alt={match.homeTeamName}
+                            sx={{
+                              width: 28,
+                              height: 28,
+                              border: '1px solid',
+                              borderColor: 'divider'
+                            }}
+                            variant="rounded"
+                          >
+                            {match.homeTeamCode?.substring(0, 2) || '??'}
+                          </Avatar>
+                          <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
+                            {match.homeTeamName || 'TBD'}
+                          </Typography>
+                        </Box>
                         {match.result && (
                           <Typography variant="h6" sx={{ mx: 2 }}>
                             {match.result.homeTeamScore}
@@ -200,9 +216,24 @@ const MatchesPage = () => {
                           justifyContent: 'space-between',
                         }}
                       >
-                        <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
-                          {match.awayTeamName || 'TBD'}
-                        </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                          <Avatar
+                            src={match.awayTeamFlagUrl}
+                            alt={match.awayTeamName}
+                            sx={{
+                              width: 28,
+                              height: 28,
+                              border: '1px solid',
+                              borderColor: 'divider'
+                            }}
+                            variant="rounded"
+                          >
+                            {match.awayTeamCode?.substring(0, 2) || '??'}
+                          </Avatar>
+                          <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
+                            {match.awayTeamName || 'TBD'}
+                          </Typography>
+                        </Box>
                         {match.result && (
                           <Typography variant="h6" sx={{ mx: 2 }}>
                             {match.result.awayTeamScore}

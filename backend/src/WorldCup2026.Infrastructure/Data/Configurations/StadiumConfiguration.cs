@@ -33,6 +33,9 @@ public class StadiumConfiguration : IEntityTypeConfiguration<Stadium>
         builder.Property(s => s.ImageUrl)
             .HasMaxLength(500);
 
+        builder.Property(s => s.FlagUrl)
+            .HasMaxLength(500);
+
         builder.Property(s => s.Latitude)
             .HasPrecision(9, 6);
 

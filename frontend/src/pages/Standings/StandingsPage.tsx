@@ -14,6 +14,7 @@ import {
   Select,
   Chip,
   Typography,
+  Avatar,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -63,7 +64,7 @@ const StandingsPage = () => {
   }, {} as Record<string, typeof standings>);
 
   return (
-    <Box>
+    <Box sx={{ maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
       <PageHeader
         title="Standings"
         subtitle="FIFA World Cup 2026 - Group Stage Standings"
@@ -176,13 +177,28 @@ const StandingsPage = () => {
                               />
                             </TableCell>
                             <TableCell>
-                              <Box>
-                                <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                                  {standing.teamName}
-                                </Typography>
-                                <Typography variant="caption" color="text.secondary">
-                                  {standing.teamCode}
-                                </Typography>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                <Avatar
+                                  src={standing.teamFlagUrl}
+                                  alt={standing.teamName}
+                                  sx={{
+                                    width: 32,
+                                    height: 32,
+                                    border: '1px solid',
+                                    borderColor: 'divider'
+                                  }}
+                                  variant="rounded"
+                                >
+                                  {standing.teamCode?.substring(0, 2) || '??'}
+                                </Avatar>
+                                <Box>
+                                  <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
+                                    {standing.teamName}
+                                  </Typography>
+                                  <Typography variant="caption" color="text.secondary">
+                                    {standing.teamCode}
+                                  </Typography>
+                                </Box>
                               </Box>
                             </TableCell>
                             <TableCell align="center">{standing.played}</TableCell>

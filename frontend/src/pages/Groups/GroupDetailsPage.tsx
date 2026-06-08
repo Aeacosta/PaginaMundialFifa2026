@@ -12,6 +12,7 @@ import {
   Paper,
   Chip,
   IconButton,
+  Avatar,
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -79,7 +80,7 @@ const GroupDetailsPage = () => {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' },
+          gridTemplateColumns: { xs: '1fr', lg: '3fr 1fr' },
           gap: 3,
         }}
       >
@@ -88,8 +89,8 @@ const GroupDetailsPage = () => {
           <Box sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}>
             <Typography variant="h6">Group Standings</Typography>
           </Box>
-          <TableContainer>
-            <Table>
+          <TableContainer sx={{ overflowX: 'auto' }}>
+            <Table sx={{ minWidth: 650 }}>
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ fontWeight: 'bold' }}>Pos</TableCell>
@@ -155,14 +156,29 @@ const GroupDetailsPage = () => {
                             }
                           />
                         </TableCell>
-                        <TableCell>
-                          <Box>
-                            <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
-                              {standing.teamName}
-                            </Typography>
-                            <Typography variant="caption" color="text.secondary">
-                              {standing.teamCode}
-                            </Typography>
+                        <TableCell sx={{ minWidth: 200 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                            <Avatar
+                              src={standing.teamFlagUrl}
+                              alt={standing.teamName}
+                              sx={{
+                                width: 28,
+                                height: 28,
+                                border: '1px solid',
+                                borderColor: 'divider'
+                              }}
+                              variant="rounded"
+                            >
+                              {standing.teamCode?.substring(0, 2) || '??'}
+                            </Avatar>
+                            <Box sx={{ minWidth: 0, flex: 1 }}>
+                              <Typography variant="body2" sx={{ fontWeight: 'medium', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {standing.teamName}
+                              </Typography>
+                              <Typography variant="caption" color="text.secondary">
+                                {standing.teamCode}
+                              </Typography>
+                            </Box>
                           </Box>
                         </TableCell>
                         <TableCell align="center">{standing.played}</TableCell>

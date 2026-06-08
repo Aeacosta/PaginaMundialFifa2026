@@ -68,7 +68,7 @@
       "phase": "GroupStage",
       "round": 1,
       "matchDate": "2026-06-12T18:00:00Z",
-      "status": "Completed",
+      "status": "Finished",
       "result": {
         "homeTeamScore": 2,
         "awayTeamScore": 1,
@@ -86,7 +86,7 @@
       "phase": "GroupStage",
       "round": 1,
       "matchDate": "2026-06-12T21:00:00Z",
-      "status": "Completed",
+      "status": "Finished",
       "result": {
         "homeTeamScore": 0,
         "awayTeamScore": 0,

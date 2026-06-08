@@ -44,7 +44,24 @@ const StadiumDetailsPage = () => {
   return (
     <Box>
       <PageHeader
-        title={stadium.name}
+        title={
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {stadium.name}
+            {stadium.flagUrl && (
+              <Box
+                component="img"
+                src={stadium.flagUrl}
+                alt={`${stadium.country} flag`}
+                sx={{
+                  width: 32,
+                  height: 21,
+                  objectFit: 'cover',
+                  borderRadius: 0.5,
+                }}
+              />
+            )}
+          </Box>
+        }
         subtitle={`${stadium.city}, ${stadium.country}`}
         breadcrumbs={[
           { label: 'Home', path: '/' },
@@ -87,13 +104,28 @@ const StadiumDetailsPage = () => {
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <LocationOnIcon color="action" />
-                  <Box>
+                  <Box sx={{ flex: 1 }}>
                     <Typography variant="body2" color="text.secondary">
                       Location
                     </Typography>
-                    <Typography variant="body1">
-                      {stadium.city}, {stadium.country}
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Typography variant="body1">
+                        {stadium.city}, {stadium.country}
+                      </Typography>
+                      {stadium.flagUrl && (
+                        <Box
+                          component="img"
+                          src={stadium.flagUrl}
+                          alt={`${stadium.country} flag`}
+                          sx={{
+                            width: 28,
+                            height: 19,
+                            objectFit: 'cover',
+                            borderRadius: 0.5,
+                          }}
+                        />
+                      )}
+                    </Box>
                   </Box>
                 </Box>
 

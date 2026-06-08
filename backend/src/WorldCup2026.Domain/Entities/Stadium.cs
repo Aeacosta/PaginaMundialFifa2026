@@ -31,6 +31,11 @@ public class Stadium : BaseEntity
     public string? ImageUrl { get; set; }
 
     /// <summary>
+    /// URL to country flag image
+    /// </summary>
+    public string? FlagUrl { get; set; }
+
+    /// <summary>
     /// Geographic latitude coordinate
     /// </summary>
     public decimal? Latitude { get; set; }
