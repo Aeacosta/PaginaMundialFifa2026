@@ -20,12 +20,14 @@ public class CreateTeamDtoValidator : AbstractValidator<CreateTeamDto>
         RuleFor(x => x.Confederation)
             .IsInEnum().WithMessage("Invalid confederation");
 
-        RuleFor(x => x.GroupId)
-            .NotEmpty().WithMessage("Group ID is required");
-
         RuleFor(x => x.FifaRanking)
             .GreaterThan(0).WithMessage("FIFA ranking must be greater than 0")
             .When(x => x.FifaRanking.HasValue);
+
+        RuleFor(x => x.FlagUrl)
+            .Must(url => Uri.TryCreate(url, UriKind.Absolute, out _))
+            .WithMessage("Flag URL must be a valid URL")
+            .When(x => !string.IsNullOrEmpty(x.FlagUrl));
     }
 }
 

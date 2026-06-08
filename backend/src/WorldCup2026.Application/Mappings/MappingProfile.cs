@@ -39,7 +39,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Group, opt => opt.Ignore())
             .ForMember(dest => dest.HomeMatches, opt => opt.Ignore())
             .ForMember(dest => dest.AwayMatches, opt => opt.Ignore())
-            .ForMember(dest => dest.Standing, opt => opt.Ignore());
+            .ForMember(dest => dest.Standing, opt => opt.Ignore())
+            .ForMember(dest => dest.WonMatches, opt => opt.Ignore());
 
         // UpdateTeamDto -> Team
         CreateMap<UpdateTeamDto, Team>()
@@ -49,7 +50,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Group, opt => opt.Ignore())
             .ForMember(dest => dest.HomeMatches, opt => opt.Ignore())
             .ForMember(dest => dest.AwayMatches, opt => opt.Ignore())
-            .ForMember(dest => dest.Standing, opt => opt.Ignore());
+            .ForMember(dest => dest.Standing, opt => opt.Ignore())
+            .ForMember(dest => dest.WonMatches, opt => opt.Ignore());
     }
 
     private void ConfigureGroupMappings()
@@ -61,6 +63,26 @@ public class MappingProfile : Profile
         // Group -> GroupWithStandingsDto
         CreateMap<Group, GroupWithStandingsDto>()
             .ForMember(dest => dest.Standings, opt => opt.MapFrom(src => src.Standings.OrderBy(s => s.Position)));
+
+        // CreateGroupDto -> Group
+        CreateMap<CreateGroupDto, Group>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.Teams, opt => opt.Ignore())
+            .ForMember(dest => dest.Standings, opt => opt.Ignore())
+            .ForMember(dest => dest.Matches, opt => opt.Ignore())
+            .ForMember(dest => dest.Description, opt => opt.Ignore());
+
+        // UpdateGroupDto -> Group
+        CreateMap<UpdateGroupDto, Group>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.Teams, opt => opt.Ignore())
+            .ForMember(dest => dest.Standings, opt => opt.Ignore())
+            .ForMember(dest => dest.Matches, opt => opt.Ignore())
+            .ForMember(dest => dest.Description, opt => opt.Ignore());
     }
 
     private void ConfigureStadiumMappings()
@@ -71,6 +93,13 @@ public class MappingProfile : Profile
 
         // CreateStadiumDto -> Stadium
         CreateMap<CreateStadiumDto, Stadium>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.Matches, opt => opt.Ignore());
+
+        // UpdateStadiumDto -> Stadium
+        CreateMap<UpdateStadiumDto, Stadium>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
             .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
@@ -115,7 +144,10 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
             .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
             .ForMember(dest => dest.Match, opt => opt.Ignore())
-            .ForMember(dest => dest.WinnerTeam, opt => opt.Ignore());
+            .ForMember(dest => dest.WinnerTeam, opt => opt.Ignore())
+            .ForMember(dest => dest.WinnerTeamId, opt => opt.Ignore())
+            .ForMember(dest => dest.HomeTeamPenalties, opt => opt.Ignore())
+            .ForMember(dest => dest.AwayTeamPenalties, opt => opt.Ignore());
     }
 
     private void ConfigureStandingMappings()
