@@ -62,27 +62,69 @@ const MainLayout = () => {
   };
 
   const drawer = (
-    <Box>
-      <Toolbar>
-        <Typography variant="h6" noWrap component="div" sx={{ fontWeight: 700 }}>
-          FIFA 2026
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Toolbar
+        sx={{
+          background: 'linear-gradient(135deg, rgba(105, 108, 255, 0.1) 0%, rgba(3, 195, 236, 0.05) 100%)',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+        }}
+      >
+        <Typography
+          variant="h6"
+          noWrap
+          component="div"
+          sx={{
+            fontWeight: 700,
+            background: 'linear-gradient(135deg, #696cff 0%, #03c3ec 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}
+        >
+          ⚽ FIFA 2026
         </Typography>
       </Toolbar>
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item.path} disablePadding>
+      <List sx={{ px: 1, py: 2, flexGrow: 1 }}>
+        {navItems.map((item, index) => (
+          <ListItem
+            key={item.path}
+            disablePadding
+            sx={{
+              mb: 0.5,
+              animation: `slideIn 0.3s ease-out ${index * 0.05}s both`,
+              '@keyframes slideIn': {
+                from: {
+                  opacity: 0,
+                  transform: 'translateX(-20px)',
+                },
+                to: {
+                  opacity: 1,
+                  transform: 'translateX(0)',
+                },
+              },
+            }}
+          >
             <ListItemButton
               selected={location.pathname.startsWith(item.path)}
               onClick={() => handleNavigation(item.path)}
               sx={{
+                borderRadius: 1.5,
+                transition: 'all 0.2s ease-in-out',
+                '&:hover': {
+                  backgroundColor: 'rgba(105, 108, 255, 0.08)',
+                  transform: 'translateX(4px)',
+                },
                 '&.Mui-selected': {
-                  backgroundColor: theme.palette.primary.main,
-                  color: theme.palette.primary.contrastText,
+                  backgroundColor: 'rgba(105, 108, 255, 0.16)',
+                  color: theme.palette.primary.main,
+                  fontWeight: 600,
+                  boxShadow: '0 2px 8px rgba(105, 108, 255, 0.3)',
                   '&:hover': {
-                    backgroundColor: theme.palette.primary.dark,
+                    backgroundColor: 'rgba(105, 108, 255, 0.24)',
                   },
                   '& .MuiListItemIcon-root': {
-                    color: theme.palette.primary.contrastText,
+                    color: theme.palette.primary.main,
                   },
                 },
               }}
@@ -90,17 +132,39 @@ const MainLayout = () => {
               <ListItemIcon
                 sx={{
                   color: location.pathname.startsWith(item.path)
-                    ? theme.palette.primary.contrastText
-                    : 'inherit',
+                    ? theme.palette.primary.main
+                    : 'text.secondary',
+                  minWidth: 40,
+                  transition: 'all 0.2s ease-in-out',
                 }}
               >
                 {item.icon}
               </ListItemIcon>
-              <ListItemText primary={item.title} />
+              <ListItemText
+                primary={item.title}
+                sx={{
+                  '& .MuiListItemText-primary': {
+                    fontSize: '0.9375rem',
+                    fontWeight: location.pathname.startsWith(item.path) ? 600 : 500,
+                  },
+                }}
+              />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
+      <Box
+        sx={{
+          p: 2,
+          borderTop: '1px solid',
+          borderColor: 'divider',
+          textAlign: 'center',
+        }}
+      >
+        <Typography variant="caption" color="text.secondary">
+          © 2026 FIFA World Cup
+        </Typography>
+      </Box>
     </Box>
   );
 
@@ -111,6 +175,9 @@ const MainLayout = () => {
         sx={{
           width: { md: `calc(100% - ${drawerWidth}px)` },
           ml: { md: `${drawerWidth}px` },
+          background: 'linear-gradient(135deg, #2b2c40 0%, #32334a 100%)',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 2px 8px rgba(15, 20, 34, 0.4)',
         }}
       >
         <Toolbar>
@@ -119,13 +186,58 @@ const MainLayout = () => {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: 'none' } }}
+            sx={{
+              mr: 2,
+              display: { md: 'none' },
+              transition: 'all 0.2s ease-in-out',
+              '&:hover': {
+                transform: 'rotate(90deg)',
+                backgroundColor: 'rgba(105, 108, 255, 0.16)',
+              },
+            }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{
+              flexGrow: 1,
+              fontWeight: 600,
+              letterSpacing: '0.5px',
+            }}
+          >
             FIFA World Cup 2026
           </Typography>
+          <Box
+            sx={{
+              display: { xs: 'none', sm: 'flex' },
+              alignItems: 'center',
+              gap: 1,
+            }}
+          >
+            <Box
+              sx={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                backgroundColor: 'success.main',
+                animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                '@keyframes pulse': {
+                  '0%, 100%': {
+                    opacity: 1,
+                  },
+                  '50%': {
+                    opacity: 0.5,
+                  },
+                },
+              }}
+            />
+            <Typography variant="caption" color="text.secondary">
+              Live
+            </Typography>
+          </Box>
         </Toolbar>
       </AppBar>
 
