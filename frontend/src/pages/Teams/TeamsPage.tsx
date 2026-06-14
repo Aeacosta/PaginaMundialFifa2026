@@ -27,22 +27,36 @@ const TeamsPage = () => {
   const [selectedGroup, setSelectedGroup] = useState<string>('');
 
   // Fetch all teams
-  const { data: teams, isLoading, error, refetch } = useQuery({
-    queryKey: ['teams', searchTerm, selectedConfederation, selectedGroup],
+  const { data: allTeams, isLoading, error, refetch } = useQuery({
+    queryKey: ['teams'],
     queryFn: async () => {
-      if (searchTerm) {
-        return teamsService.search(searchTerm);
-      }
-      if (selectedConfederation) {
-        return teamsService.getByConfederation(selectedConfederation as Confederation);
-      }
-      if (selectedGroup) {
-        const groupId = selectedGroup.charCodeAt(0) - 64; // Convert 'A' to 1, 'B' to 2, etc.
-        return teamsService.getByGroup(groupId);
-      }
       const result = await teamsService.getAll(1, 100); // Get all teams
       return result.items;
     },
+  });
+
+  // Apply filters client-side with AND logic
+  const teams = allTeams?.filter((team) => {
+    // Search filter
+    if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch =
+        team.name.toLowerCase().includes(searchLower) ||
+        team.code.toLowerCase().includes(searchLower);
+      if (!matchesSearch) return false;
+    }
+
+    // Confederation filter (AND)
+    if (selectedConfederation && team.confederation !== selectedConfederation) {
+      return false;
+    }
+
+    // Group filter (AND)
+    if (selectedGroup && team.groupName !== selectedGroup) {
+      return false;
+    }
+
+    return true;
   });
 
   const handleTeamClick = (teamId: number) => {
@@ -189,7 +203,7 @@ const TeamsPage = () => {
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 1, mt: 2, flexWrap: 'wrap' }}>
                   <Chip
-                    label={team.confederation}
+                    label={team.confederationName || team.confederation}
                     size="small"
                     color="primary"
                     variant="outlined"

@@ -23,6 +23,7 @@ export const mockTeam: TeamDto = {
   groupId: 1,
   groupName: 'Group A',
   confederation: Confederation.CONMEBOL,
+  confederationName: 'CONMEBOL',
   fifaRanking: 1,
 };
 
@@ -36,6 +37,7 @@ export const mockTeams: TeamDto[] = [
     groupId: 1,
     groupName: 'Group A',
     confederation: Confederation.CONMEBOL,
+    confederationName: 'CONMEBOL',
     fifaRanking: 2,
   },
   {
@@ -46,6 +48,7 @@ export const mockTeams: TeamDto[] = [
     groupId: 2,
     groupName: 'Group B',
     confederation: Confederation.UEFA,
+    confederationName: 'UEFA',
     fifaRanking: 3,
   },
 ];

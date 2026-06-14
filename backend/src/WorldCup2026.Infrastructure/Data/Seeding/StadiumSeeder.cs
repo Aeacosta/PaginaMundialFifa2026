@@ -153,7 +153,7 @@ public class StadiumSeeder : IDataSeeder
             {
                 Name = "Estadio Azteca",
                 City = "Mexico City",
-                Country = "Mexico",
+                Country = "MEX",
                 Capacity = 87523,
                 ImageUrl = "https://lirp.cdn-website.com/7dc051fe/dms3rep/multi/opt/arquitecto+estadio+azteca+5-1920w.jpg?w=800&h=600&fit=crop",
                 FlagUrl = "https://flagcdn.com/w320/mx.png",
@@ -164,7 +164,7 @@ public class StadiumSeeder : IDataSeeder
             {
                 Name = "Estadio BBVA",
                 City = "Monterrey",
-                Country = "Mexico",
+                Country = "MEX",
                 Capacity = 53500,
                 ImageUrl = "https://cdn-3.expansion.mx/dims4/default/9613cd2/2147483647/strip/true/crop/659x452+0+0/resize/800x549!/format/webp/quality/80/?url=https%3A%2F%2Fcdn-3.expansion.mx%2F18%2F18e32fe88230020890ac375adb565768%2Festadiobbvabancomeruno20150803104850.jpg&h=600&fit=crop",
                 FlagUrl = "https://flagcdn.com/w320/mx.png",
@@ -175,7 +175,7 @@ public class StadiumSeeder : IDataSeeder
             {
                 Name = "Estadio Akron",
                 City = "Guadalajara",
-                Country = "Mexico",
+                Country = "MEX",
                 Capacity = 46232,
                 ImageUrl = "https://colombiaone.com/wp-content/uploads/2026/04/Estadio-Akron-1536x1024.jpg.webp?w=800&h=600&fit=crop",
                 FlagUrl = "https://flagcdn.com/w320/mx.png",
@@ -187,7 +187,7 @@ public class StadiumSeeder : IDataSeeder
             {
                 Name = "BMO Field",
                 City = "Toronto",
-                Country = "Canada",
+                Country = "CAN",
                 Capacity = 45500,
                 ImageUrl = "https://images.mlssoccer.com/image/private/t_editorial_landscape_12_desktop/mls-tor/tfhcxeuqozdayhjeb4bw.jpg?w=800&h=600&fit=crop",
                 FlagUrl = "https://flagcdn.com/w320/ca.png",
@@ -198,7 +198,7 @@ public class StadiumSeeder : IDataSeeder
             {
                 Name = "BC Place",
                 City = "Vancouver",
-                Country = "Canada",
+                Country = "CAN",
                 Capacity = 54500,
                 ImageUrl = "https://images.pexels.com/photos/33378699/pexels-photo-33378699.jpeg?w=800&h=600&fit=crop",
                 FlagUrl = "https://flagcdn.com/w320/ca.png",

@@ -35,6 +35,7 @@ export interface TeamDto {
   groupId?: number;
   groupName?: string;
   confederation: Confederation;
+  confederationName: string;
   fifaRanking?: number;
 }
 

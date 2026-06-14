@@ -152,7 +152,7 @@ const DashboardPage = () => {
                         {match.stadiumName}
                       </Typography>
                       <Typography variant="caption" color="primary.main" sx={{ fontWeight: 500 }}>
-                        {match.phase}
+                        {match.phaseName || match.phase}
                       </Typography>
                     </Box>
                   </Paper>

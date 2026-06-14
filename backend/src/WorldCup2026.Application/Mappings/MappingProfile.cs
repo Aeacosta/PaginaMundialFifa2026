@@ -165,12 +165,12 @@ public class MappingProfile : Profile
     {
         return confederation switch
         {
-            Confederation.AFC => "AFC (Asia)",
-            Confederation.CAF => "CAF (Africa)",
-            Confederation.CONCACAF => "CONCACAF (North/Central America)",
-            Confederation.CONMEBOL => "CONMEBOL (South America)",
-            Confederation.OFC => "OFC (Oceania)",
-            Confederation.UEFA => "UEFA (Europe)",
+            Confederation.AFC => "AFC",
+            Confederation.CAF => "CAF",
+            Confederation.CONCACAF => "CONCACAF",
+            Confederation.CONMEBOL => "CONMEBOL",
+            Confederation.OFC => "OFC",
+            Confederation.UEFA => "UEFA",
             _ => confederation.ToString()
         };
     }
