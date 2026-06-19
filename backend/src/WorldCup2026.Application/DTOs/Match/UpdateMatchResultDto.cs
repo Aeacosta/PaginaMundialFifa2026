@@ -9,6 +9,7 @@ public class UpdateMatchResultDto
     public int AwayTeamScore { get; set; }
     public int? HomeTeamPenalties { get; set; }
     public int? AwayTeamPenalties { get; set; }
+    public string? Highlights { get; set; }
 }
 
 // Made with Bob

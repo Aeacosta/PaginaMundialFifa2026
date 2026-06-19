@@ -145,9 +145,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
             .ForMember(dest => dest.Match, opt => opt.Ignore())
             .ForMember(dest => dest.WinnerTeam, opt => opt.Ignore())
-            .ForMember(dest => dest.WinnerTeamId, opt => opt.Ignore())
-            .ForMember(dest => dest.HomeTeamPenalties, opt => opt.Ignore())
-            .ForMember(dest => dest.AwayTeamPenalties, opt => opt.Ignore());
+            .ForMember(dest => dest.WinnerTeamId, opt => opt.Ignore());
     }
 
     private void ConfigureStandingMappings()

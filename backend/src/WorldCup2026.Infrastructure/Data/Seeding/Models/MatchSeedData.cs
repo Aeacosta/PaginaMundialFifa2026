@@ -35,6 +35,7 @@ public class MatchResultData
     public int? AwayTeamPenalties { get; set; }
     public int? HomeTeamExtraTimeScore { get; set; }
     public int? AwayTeamExtraTimeScore { get; set; }
+    public string? Highlights { get; set; }
 }
 
 // Made with Bob

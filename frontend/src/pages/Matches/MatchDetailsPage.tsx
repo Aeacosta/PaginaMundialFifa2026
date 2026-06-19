@@ -177,6 +177,24 @@ const MatchDetailsPage = () => {
                 </Typography>
               </Box>
             )}
+
+            {match.result?.highlights && (
+              <Box sx={{ pt: 3, borderTop: 1, borderColor: 'divider', mt: 2 }}>
+                <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                  Match Highlights
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontStyle: 'italic',
+                    lineHeight: 1.6,
+                    color: 'text.primary'
+                  }}
+                >
+                  {match.result.highlights}
+                </Typography>
+              </Box>
+            )}
           </CardContent>
         </Card>
 

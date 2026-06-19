@@ -30,6 +30,10 @@ public class MatchResultConfiguration : IEntityTypeConfiguration<MatchResult>
         builder.Property(mr => mr.WinnerTeamId)
             .IsRequired(false);
 
+        builder.Property(mr => mr.Highlights)
+            .IsRequired(false)
+            .HasMaxLength(1000);
+
         // Indexes
         builder.HasIndex(mr => mr.MatchId)
             .IsUnique();

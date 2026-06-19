@@ -35,6 +35,11 @@ public class MatchResult : BaseEntity
     /// </summary>
     public int? WinnerTeamId { get; set; }
 
+    /// <summary>
+    /// Match highlights and key moments description
+    /// </summary>
+    public string? Highlights { get; set; }
+
     // Navigation properties
 
     /// <summary>

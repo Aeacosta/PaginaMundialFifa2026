@@ -144,6 +144,7 @@ export interface MatchResultDto {
   awayTeamPenalties?: number;
   winnerTeamId?: number;
   winnerTeamName?: string;
+  highlights?: string;
 }
 
 export interface UpdateMatchResultDto {

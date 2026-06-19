@@ -268,6 +268,7 @@ public class JsonMatchSeeder : IDataSeeder
             HomeTeamPenalties = resultData.HomeTeamPenalties,
             AwayTeamPenalties = resultData.AwayTeamPenalties,
             WinnerTeamId = winnerId,
+            Highlights = resultData.Highlights,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };

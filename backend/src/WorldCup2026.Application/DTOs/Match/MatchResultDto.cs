@@ -13,6 +13,7 @@ public class MatchResultDto
     public int? AwayTeamPenalties { get; set; }
     public int? WinnerTeamId { get; set; }
     public string? WinnerTeamName { get; set; }
+    public string? Highlights { get; set; }
 }
 
 // Made with Bob
