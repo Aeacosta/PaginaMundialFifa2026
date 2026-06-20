@@ -15,9 +15,24 @@ public class TeamRepository : Repository<Team>, ITeamRepository
     {
     }
 
+    public override async Task<IEnumerable<Team>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(t => t.Group)
+            .ToListAsync(cancellationToken);
+    }
+
+    public override async Task<Team?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    {
+        return await _dbSet
+            .Include(t => t.Group)
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+    }
+
     public async Task<Team?> GetByCodeAsync(string code, CancellationToken cancellationToken = default)
     {
         return await _dbSet
+            .Include(t => t.Group)
             .FirstOrDefaultAsync(t => t.Code == code, cancellationToken);
     }
 
@@ -25,6 +40,7 @@ public class TeamRepository : Repository<Team>, ITeamRepository
     {
         return await _dbSet
             .Where(t => t.GroupId == groupId)
+            .Include(t => t.Group)
             .Include(t => t.Standing)
             .OrderBy(t => t.Name)
             .ToListAsync(cancellationToken);
@@ -34,6 +50,7 @@ public class TeamRepository : Repository<Team>, ITeamRepository
     {
         return await _dbSet
             .Where(t => t.Confederation == confederation)
+            .Include(t => t.Group)
             .OrderBy(t => t.Name)
             .ToListAsync(cancellationToken);
     }
