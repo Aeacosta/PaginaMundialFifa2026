@@ -46,7 +46,16 @@
       "phase": "GroupStage",
       "round": 2,
       "matchDate": "2026-06-15T18:00:00Z",
-      "status": "Scheduled"
+      "status": "Finished",
+      "result": {
+        "homeTeamScore": 1,
+        "awayTeamScore": 0,
+        "homeTeamPenalties": null,
+        "awayTeamPenalties": null,
+        "homeTeamExtraTimeScore": null,
+        "awayTeamExtraTimeScore": null,
+        "highlights": "Luis Romo punishes a critical defensive error in the 50th minute, and a spectacular late double-save from goalkeeper Raúl Rangel seals a narrow victory for Mexico, ensuring they top Group A."
+      }
     },
     {
       "homeTeamCode": "RSA",
@@ -56,7 +65,16 @@
       "phase": "GroupStage",
       "round": 2,
       "matchDate": "2026-06-15T21:00:00Z",
-      "status": "Scheduled"
+      "status": "Finished",
+      "result": {
+        "homeTeamScore": 1,
+        "awayTeamScore": 1,
+        "homeTeamPenalties": null,
+        "awayTeamPenalties": null,
+        "homeTeamExtraTimeScore": null,
+        "awayTeamExtraTimeScore": null,
+        "highlights": "A gritty, dramatic battle leaves the points shared. Teboho Mokoena's cool second-half penalty response keeps Bafana Bafana's knockout hopes alive heading into the final matchday."
+      }
     },
     {
       "homeTeamCode": "MEX",
@@ -65,7 +83,7 @@
       "groupName": "Group A",
       "phase": "GroupStage",
       "round": 3,
-      "matchDate": "2026-06-19T18:00:00Z",
+      "matchDate": "2026-06-24T18:00:00Z",
       "status": "Scheduled"
     },
     {
@@ -75,7 +93,7 @@
       "groupName": "Group A",
       "phase": "GroupStage",
       "round": 3,
-      "matchDate": "2026-06-19T18:00:00Z",
+      "matchDate": "2026-06-24T18:00:00Z",
       "status": "Scheduled"
     },
     {

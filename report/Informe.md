@@ -1,7 +1,9 @@
 # Proyecto: Aplicación Web Asistida por IA
 
 Estudiante: Allan Acosta Porras <br>
-Correo: aacostap@ucenfotec.ac.cr
+Correo: aacostap@ucenfotec.ac.cr <br>
+Repositiorio: https://github.com/Aeacosta/PaginaMundialFifa2026
+
 
 ## Tabla de Contenidos
 
@@ -44,11 +46,11 @@ Correo: aacostap@ucenfotec.ac.cr
 
 ## Introducción
 
-El siguiento documento se elaboró con el objetivo de elaborar una aplicación Web. A lo largo de su desarrollo, se explica como fue aplicada la Inteligencia Artificial en cada una de sus etaps.
+El siguiento documento se elaboró con el objetivo de elaborar una aplicación Web. A lo largo de su desarrollo, se explica como fue aplicada la Inteligencia Artificial en cada una de sus etapas.
 
 ## Arquitectura
 
-La arquitectura consiste en la interfaz desarrollada en React. El Back End desde .NET 9. Finalmente la base de datos correr bajo SQLite
+La arquitectura consiste en la interfaz desarrollada en React. El Back End desde .NET 9. Finalmente la base de datos corre bajo SQLite
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -833,8 +835,6 @@ networks:
 # Made with Bob
 ```
 
-```
-
 El siguiente comando va a construir la imagen de Docker y desplegar los contenedores en el servidor.
 
 ```bash
@@ -846,6 +846,31 @@ docker-compose up --build
 
 ![Docker](./docker/AplicacionDesdeDocker.jpg)
 
-### Documentación
+## Documentación
 
 A lo largo de la elaboración de este proyecto, la IA fue de gran aporte para documentar y resumenes ejecutivos el progreso en cada punto del desarrollo.
+
+![Workbench](./doc/workbench.jpg)
+
+## Conclusiones
+
+El objetivo de este proyecto fue ejercitar el uso de la inteligencia artificial para el desarrollo de una aplicacion web. Se ejercito su uso en varios puntos del desarrollo como lo fue:
+
+- Requirimientos
+- Diseño
+- Front End
+- Back End
+- Base de Datos
+- Documentación
+- Escaliabilidad por Docker
+- CICD
+
+Es importante destacar que la inteligencia artificial por si sola no es suficiente para el desarrollo de una aplicación, es necesario un equipo de trabajo con conocimientos de diferentes ámbitos para lograr un proyecto sostenible y escalable. La inteligencia artificial es un herramienta que puede ser utilizada para mejorar la eficiencia y la calidad del trabajo de los desarrolladores pero no reemplaza a los desarrolladores.
+
+## Referencias
+
+- [Docker](https://www.docker.com/)
+- [Bob IBM](https://bob.ibm.com/)
+- [GitHub](https://github.com/)
+- [DotNet](https://dotnet.microsoft.com/)
+- [React](https://es.reactjs.org/)
